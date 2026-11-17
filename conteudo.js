@@ -278,7 +278,7 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f1",
         "tamanho": 72,
-        "x": 12,
+        "x": 9.6,
         "y": 40,
         "xm": 5,
         "ym": 64
@@ -288,30 +288,32 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f2",
         "tamanho": 54,
-        "x": 80,
-        "y": 33,
+        "x": 82.9,
+        "y": 28.2,
         "xm": 80,
-        "ym": 21
+        "ym": 21,
+        "espelhar": true
       },
       {
         "arte": "beija-flor-2",
         "cor": "azul",
         "voo": "f3",
         "tamanho": 46,
-        "x": 60,
-        "y": 70,
+        "x": 60.4,
+        "y": 60.3,
         "xm": 64,
         "ym": 76
       },
       {
-        "arte": "andorinha",
+        "arte": "beija-flor-2",
         "cor": "azul",
-        "voo": "f4",
+        "voo": "f3",
         "tamanho": 40,
-        "x": 24,
-        "y": 16,
+        "x": 35.9,
+        "y": 21.2,
         "xm": 10,
-        "ym": 14
+        "ym": 14,
+        "espelhar": true
       }
     ],
     "contagem": [
