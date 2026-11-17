@@ -96,7 +96,8 @@ window.CONTEUDO = {
     "texto": "Gramados, pergolado, palmeiras e um grande abacateiro: foi desse cenário que nasceram os desenhos da nossa papelaria — uma releitura do clássico toile, em azul.\n\nA cerimônia e boa parte da festa acontecem ao ar livre, nos jardins da chácara. O local tem estacionamento amplo.",
     "endereco": "R. João Vaz Ferreira, 300\nChácaras Rancho Alegre · Uberlândia · MG\nCEP 38412-681",
     "linkMaps": "https://www.google.com/maps/search/?api=1&query=Ch%C3%A1cara%20Bela%20Vista%2C%20R.%20Jo%C3%A3o%20Vaz%20Ferreira%2C%20300%2C%20Uberl%C3%A2ndia%20-%20MG",
-    "linkWaze": "https://waze.com/ul?q=R.%20Jo%C3%A3o%20Vaz%20Ferreira%2C%20300%2C%20Uberl%C3%A2ndia%20-%20MG&navigate=yes"
+    "linkWaze": "https://waze.com/ul?q=R.%20Jo%C3%A3o%20Vaz%20Ferreira%2C%20300%2C%20Uberl%C3%A2ndia%20-%20MG&navigate=yes",
+    "blocos": []
   },
   "programacao": {
     "eyebrow": "A celebração",
@@ -316,24 +317,7 @@ window.CONTEUDO = {
         "espelhar": true
       }
     ],
-    "contagem": [
-      {
-        "arte": "andorinha",
-        "cor": "creme",
-        "voo": "cross",
-        "tamanho": 46,
-        "x": 0,
-        "y": 18
-      },
-      {
-        "arte": "beija-flor-1",
-        "cor": "creme",
-        "voo": "cross",
-        "tamanho": 34,
-        "x": 0,
-        "y": 62
-      }
-    ],
+    "contagem": [],
     "convite": [
       {
         "arte": "beija-flor-2",
@@ -362,8 +346,8 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f2",
         "tamanho": 62,
-        "x": 42,
-        "y": 12,
+        "x": 25,
+        "y": 10,
         "xm": 76,
         "ym": 5
       },
@@ -372,8 +356,8 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f1",
         "tamanho": 46,
-        "x": 36,
-        "y": 20,
+        "x": 8.1,
+        "y": 18.7,
         "xm": 64,
         "ym": 10
       },
@@ -386,6 +370,16 @@ window.CONTEUDO = {
         "y": 30,
         "xm": 12,
         "ym": 14
+      },
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 54,
+        "x": 38.4,
+        "y": 20.8,
+        "espelhar": false,
+        "soPc": false
       }
     ],
     "programacao": [
@@ -394,8 +388,8 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f4",
         "tamanho": 73,
-        "x": 78.5,
-        "y": 10.5,
+        "x": 74.6,
+        "y": 12.6,
         "xm": 89.7,
         "ym": 9.7
       },
@@ -403,9 +397,9 @@ window.CONTEUDO = {
         "arte": "beija-flor-1",
         "cor": "azul",
         "voo": "f1",
-        "tamanho": 54,
-        "x": 45,
-        "y": 20,
+        "tamanho": 69,
+        "x": 29.6,
+        "y": 51.4,
         "espelhar": false,
         "soPc": false,
         "xm": -0.8,
@@ -418,8 +412,8 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "parado",
         "tamanho": 71,
-        "x": 14,
-        "y": 12,
+        "x": 46.5,
+        "y": 6.3,
         "xm": 41.3,
         "ym": 4.7
       }
@@ -453,24 +447,25 @@ window.CONTEUDO = {
         "cor": "creme",
         "voo": "f1",
         "tamanho": 62,
-        "x": 7,
-        "y": 12
+        "x": 15.4,
+        "y": 21.5
       },
       {
         "arte": "beija-flor-1",
         "cor": "creme",
         "voo": "f3",
         "tamanho": 46,
-        "x": 88,
-        "y": 80
+        "x": 80.7,
+        "y": 75.6,
+        "espelhar": true
       },
       {
         "arte": "arvore",
         "cor": "azul",
         "voo": "parado",
         "tamanho": 32,
-        "x": 45,
-        "y": 20,
+        "x": 48.6,
+        "y": 84,
         "espelhar": false,
         "soPc": false,
         "xm": 45,
@@ -483,8 +478,8 @@ window.CONTEUDO = {
         "cor": "creme",
         "voo": "f2",
         "tamanho": 102,
-        "x": 16,
-        "y": 18,
+        "x": 15.9,
+        "y": 23.5,
         "xm": 2,
         "ym": 24.5
       },
@@ -493,8 +488,8 @@ window.CONTEUDO = {
         "cor": "creme",
         "voo": "f3",
         "tamanho": 67,
-        "x": 80,
-        "y": 28,
+        "x": 75.6,
+        "y": 72.2,
         "xm": 72.9,
         "ym": 75.2
       }
