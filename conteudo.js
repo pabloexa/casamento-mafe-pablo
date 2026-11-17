@@ -1,6 +1,6 @@
 window.CONTEUDO = {
   "config": {
-    "dataEvento": "2027-06-05T16:00:00-03:00",
+    "dataEvento": "2027-06-05T15:30:00-03:00",
     "whatsapp": "34999902008",
     "pixChave": "+5534999902008",
     "pixNome": "Pablo Fernandes Crosara",
