@@ -2,7 +2,7 @@ window.CONTEUDO = {
   "config": {
     "dataEvento": "2027-06-05T16:00:00-03:00",
     "whatsapp": "34999902008",
-    "pixChave": "34999902008",
+    "pixChave": "+5534999902008",
     "pixNome": "Pablo Fernandes Crosara",
     "pixCidade": "Uberlândia",
     "mapaBusca": "Chácara Bela Vista, R. João Vaz Ferreira, 300, Uberlândia - MG, 38412-681"
@@ -75,7 +75,8 @@ window.CONTEUDO = {
     "data": "05 de junho de 2027",
     "hora": "Às quinze horas e trinta minutos",
     "local": "Chácara Bela Vista",
-    "endereco": "R. João Vaz Ferreira, 300,\nChácaras Rancho Alegre, Uberlândia, MG"
+    "endereco": "R. João Vaz Ferreira, 300,\nChácaras Rancho Alegre, Uberlândia, MG",
+    "blocos": []
   },
   "nos": {
     "eyebrow": "Nós dois",
