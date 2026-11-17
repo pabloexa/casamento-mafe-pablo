@@ -104,8 +104,8 @@ window.CONTEUDO = {
     "itens": [
       {
         "hora": "15h30",
-        "titulo": "Recepção",
-        "texto": "Chegada dos convidados à Chácara Bela Vista."
+        "titulo": "Welcome Drinks",
+        "texto": "Chegada dos convidados à Chácara Bela Vista com direito a um drink escolhido pelos noivos."
       },
       {
         "hora": "16h",
@@ -115,19 +115,15 @@ window.CONTEUDO = {
       {
         "hora": "17h",
         "titulo": "Coquetel",
-        "texto": "Entradas e drinks nos jardins, ao entardecer."
+        "texto": "Entradas, drinks no jardim e pista liberada."
       },
       {
         "hora": "19h",
         "titulo": "Jantar",
         "texto": "Servido no salão."
-      },
-      {
-        "hora": "21h",
-        "titulo": "Festa",
-        "texto": "Pista aberta e brindes. Que a festa comece!"
       }
-    ]
+    ],
+    "blocos": []
   },
   "menu": {
     "eyebrow": "À mesa",
@@ -152,14 +148,15 @@ window.CONTEUDO = {
         "titulo": "Sobremesa",
         "texto": "Pavê de chocolate meio amargo e tartelete de limão siciliano com merengue."
       }
-    ]
+    ],
+    "blocos": []
   },
   "detalhes": {
     "eyebrow": "Para saber",
     "titulo": "*Detalhes* do dia",
     "itens": [
       {
-        "icone": "assets/beija-flor-1-azul.png",
+        "icone": "assets/monograma-azul.png",
         "titulo": "Traje",
         "texto": "Esporte fino. Pedimos que evitem branco, off-white e azul-marinho."
       },
@@ -178,7 +175,8 @@ window.CONTEUDO = {
         "titulo": "Para quem vem de fora",
         "texto": "Em breve, dicas de hospedagem em Uberlândia."
       }
-    ]
+    ],
+    "blocos": []
   },
   "presentes": {
     "eyebrow": "Lista de presentes",
@@ -258,17 +256,246 @@ window.CONTEUDO = {
         "imagem": "",
         "link": ""
       }
-    ]
+    ],
+    "blocos": []
   },
   "confirmar": {
     "eyebrow": "Confirme sua presença",
     "titulo": "*Esperamos* você",
     "texto": "Por favor, confirme até 30 de abril de 2027.",
-    "agradecimento": "Obrigado! Recebemos sua confirmação. Até 05 de junho!"
+    "agradecimento": "Obrigado! Recebemos sua confirmação. Até 05 de junho!",
+    "blocos": []
   },
   "rodape": {
     "data": "05 . 06 . 2027",
     "local": "Chácara Bela Vista · Uberlândia · MG",
     "credito": ""
+  },
+  "enfeites": {
+    "capa": [
+      {
+        "arte": "andorinha",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 72,
+        "x": 12,
+        "y": 40,
+        "xm": 5,
+        "ym": 64
+      },
+      {
+        "arte": "beija-flor-1",
+        "cor": "azul",
+        "voo": "f2",
+        "tamanho": 54,
+        "x": 80,
+        "y": 33,
+        "xm": 80,
+        "ym": 21
+      },
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f3",
+        "tamanho": 46,
+        "x": 60,
+        "y": 70,
+        "xm": 64,
+        "ym": 76
+      },
+      {
+        "arte": "andorinha",
+        "cor": "azul",
+        "voo": "f4",
+        "tamanho": 40,
+        "x": 24,
+        "y": 16,
+        "xm": 10,
+        "ym": 14
+      }
+    ],
+    "contagem": [
+      {
+        "arte": "andorinha",
+        "cor": "creme",
+        "voo": "cross",
+        "tamanho": 46,
+        "x": 0,
+        "y": 18
+      },
+      {
+        "arte": "beija-flor-1",
+        "cor": "creme",
+        "voo": "cross",
+        "tamanho": 34,
+        "x": 0,
+        "y": 62
+      }
+    ],
+    "convite": [
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f2",
+        "tamanho": 52,
+        "x": 86,
+        "y": 9,
+        "xm": 82,
+        "ym": 4
+      }
+    ],
+    "nos": [
+      {
+        "arte": "beija-flor-1",
+        "cor": "azul",
+        "voo": "f3",
+        "tamanho": 46,
+        "x": 7,
+        "y": 8
+      }
+    ],
+    "local": [
+      {
+        "arte": "andorinha",
+        "cor": "azul",
+        "voo": "f2",
+        "tamanho": 62,
+        "x": 42,
+        "y": 12,
+        "xm": 76,
+        "ym": 5
+      },
+      {
+        "arte": "beija-flor-1",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 46,
+        "x": 36,
+        "y": 20,
+        "xm": 64,
+        "ym": 10
+      },
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f3",
+        "tamanho": 40,
+        "x": 6,
+        "y": 30,
+        "xm": 12,
+        "ym": 14
+      }
+    ],
+    "programacao": [
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f4",
+        "tamanho": 73,
+        "x": 78.5,
+        "y": 10.5,
+        "xm": 89.7,
+        "ym": 9.7
+      },
+      {
+        "arte": "beija-flor-1",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 54,
+        "x": 45,
+        "y": 20,
+        "espelhar": false,
+        "soPc": false,
+        "xm": -0.8,
+        "ym": 20.8
+      }
+    ],
+    "menu": [
+      {
+        "arte": "arvore",
+        "cor": "azul",
+        "voo": "parado",
+        "tamanho": 71,
+        "x": 14,
+        "y": 12,
+        "xm": 41.3,
+        "ym": 4.7
+      }
+    ],
+    "detalhes": [],
+    "presentes": [
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f3",
+        "tamanho": 46,
+        "x": 9,
+        "y": 6,
+        "xm": 5,
+        "ym": 3
+      },
+      {
+        "arte": "andorinha",
+        "cor": "azul",
+        "voo": "f2",
+        "tamanho": 40,
+        "x": 86,
+        "y": 10,
+        "xm": 84,
+        "ym": 6
+      }
+    ],
+    "confirmar": [
+      {
+        "arte": "andorinha",
+        "cor": "creme",
+        "voo": "f1",
+        "tamanho": 62,
+        "x": 7,
+        "y": 12
+      },
+      {
+        "arte": "beija-flor-1",
+        "cor": "creme",
+        "voo": "f3",
+        "tamanho": 46,
+        "x": 88,
+        "y": 80
+      },
+      {
+        "arte": "arvore",
+        "cor": "azul",
+        "voo": "parado",
+        "tamanho": 32,
+        "x": 45,
+        "y": 20,
+        "espelhar": false,
+        "soPc": false,
+        "xm": 45,
+        "ym": 81.3
+      }
+    ],
+    "rodape": [
+      {
+        "arte": "andorinha",
+        "cor": "creme",
+        "voo": "f2",
+        "tamanho": 102,
+        "x": 16,
+        "y": 18,
+        "xm": 2,
+        "ym": 24.5
+      },
+      {
+        "arte": "beija-flor-2",
+        "cor": "creme",
+        "voo": "f3",
+        "tamanho": 67,
+        "x": 80,
+        "y": 28,
+        "xm": 72.9,
+        "ym": 75.2
+      }
+    ]
   }
 };
