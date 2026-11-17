@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-<script>document.write('<script src="conteudo.js?v=' + Date.now() + '"><\/script>');</script>
+<script>(function(v){ document.write('<script src="conteudo.js?v=' + v + '"><\/script><script src="blocos.js?v=' + v + '"><\/script>'); })(Date.now());</script>
 <style>
   :root{
     --nude:#ede9e2; --paper:#f7f5f1; --white:#fff; --gray:#8a919c; --navy:#1b2e49; --navy-dark:#111a2c;
@@ -20,7 +20,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:var(--sans);font-size:14px;color:var(--navy);background:var(--nude);-webkit-font-smoothing:antialiased;overflow:hidden}
-  button{font-family:inherit;cursor:pointer}
+  button{font-family:inherit;cursor:pointer;color:inherit}
   input,textarea,select{font-family:inherit;font-size:14px;color:var(--navy)}
   .app{display:grid;grid-template-rows:auto 1fr;height:100vh;height:100dvh}
 
@@ -46,7 +46,7 @@
   .b[disabled]{opacity:.45;pointer-events:none}
 
   /* Corpo: menu | editor | prévia */
-  .body{display:grid;grid-template-columns:220px minmax(360px,520px) 1fr;min-height:0}
+  .body{display:grid;grid-template-columns:220px minmax(360px,540px) 1fr;min-height:0}
   .side{padding:18px 12px;overflow:auto;border-right:1px solid var(--line)}
   .side h4{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray);font-weight:600;margin:14px 12px 8px}
   .side h4:first-child{margin-top:0}
@@ -55,10 +55,13 @@
   .side button.on{background:var(--navy);color:var(--nude)}
   .side button .off{margin-left:auto;font-size:10px;opacity:.6;font-weight:500}
   .side button .dot{width:7px;height:7px;border-radius:50%;background:#e8b04b;margin-left:auto}
+  .side button.nova{border:1.5px dashed rgba(27,46,73,.28);margin-top:6px;justify-content:center;font-weight:600}
+  .side button.nova:hover{border-color:var(--navy);background:#fff}
 
   .editor{overflow:auto;padding:26px 26px 80px;background:var(--paper);border-right:1px solid var(--line)}
   .editor h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;margin-bottom:6px}
   .editor .intro{font-size:13px;color:#5b6575;line-height:1.55;margin-bottom:22px}
+  .editor h3.grp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);font-weight:600;margin:28px 4px 10px}
   .card{background:#fff;border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(17,26,44,.04)}
   .f{margin-bottom:16px}.f:last-child{margin-bottom:0}
   .f > label,.lbl{display:block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5b6575;margin:0 0 7px 4px}
@@ -70,6 +73,7 @@
   .hint b{color:#5b6575}
   .money{position:relative}.money span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:13px}
   .money input{padding-left:40px!important}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
   /* Interruptor */
   .sw,.f > label.sw{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;font-size:14px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--navy);margin:0}
@@ -79,25 +83,43 @@
   .sw input:checked + i{background:var(--navy)}
   .sw input:checked + i::after{transform:translateX(18px)}
 
-  /* Imagem */
+  /* Controle deslizante */
+  .rng{display:flex;align-items:center;gap:12px}
+  .rng input[type=range]{flex:1;accent-color:var(--navy)}
+  .rng output{min-width:58px;text-align:right;font-weight:600;font-size:13px}
+  .rng .b{padding:5px 10px;font-size:11px}
+
+  /* Imagem e ícones */
   .img-f{display:flex;gap:14px;align-items:center}
   .thumb{width:84px;height:84px;border-radius:16px;background:var(--nude) url(assets/toile-creme.jpg) center/300px;background-blend-mode:multiply;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center}
   .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb.icon{background:var(--nude)}
   .thumb.icon img{object-fit:contain;padding:12px}
+  .thumb svg,.mini svg,.pick svg{width:60%;height:60%;color:var(--navy)}
+  .thumb.escuro,.mini.escuro{background:var(--navy)}
   .img-f .acts{display:flex;flex-wrap:wrap;gap:8px}
-  .icons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .icons button{width:52px;height:52px;border-radius:14px;border:1px solid var(--line);background:var(--paper);padding:8px}
-  .icons button img{width:100%;height:100%;object-fit:contain}
-  .icons button.on{border-color:var(--navy);background:#fff;box-shadow:0 0 0 2px var(--navy) inset}
+  .tabs{display:inline-flex;background:var(--nude);border-radius:999px;padding:3px;margin:12px 0 10px}
+  .tabs button{border:0;background:transparent;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600}
+  .tabs button.on{background:var(--navy);color:var(--nude)}
+  .icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px;max-height:260px;overflow:auto;padding:2px}
+  .pick{aspect-ratio:1;border-radius:14px;border:1px solid var(--line);background:var(--paper);padding:8px;display:flex;align-items:center;justify-content:center;position:relative}
+  .pick img{width:100%;height:100%;object-fit:contain}
+  .pick:hover{border-color:var(--navy)}
+  .pick.on{border-color:var(--navy);background:#fff;box-shadow:0 0 0 2px var(--navy) inset}
+  .pick.escuro{background:var(--navy)}
+  .pick[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--navy-dark);color:#fff;font-size:11px;padding:3px 8px;border-radius:6px;white-space:nowrap;z-index:5;pointer-events:none}
 
   /* Listas */
   .list{display:flex;flex-direction:column;gap:10px}
   .it{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .it .it{background:var(--paper)}
   .it.open{border-color:rgba(27,46,73,.35);box-shadow:0 8px 24px rgba(17,26,44,.08)}
   .it-h{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;cursor:pointer}
-  .it-h .mini{width:38px;height:38px;border-radius:10px;background:var(--nude) url(assets/toile-creme.jpg) center/160px;background-blend-mode:multiply;flex:none;overflow:hidden}
-  .it-h .mini img{width:100%;height:100%;object-fit:cover}
-  .it-h .mini.icon img{object-fit:contain;padding:5px}
+  .mini{width:38px;height:38px;border-radius:10px;background:var(--nude) url(assets/toile-creme.jpg) center/160px;background-blend-mode:multiply;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .mini img{width:100%;height:100%;object-fit:cover}
+  .mini.icon{background:var(--nude)}
+  .mini.icon img{object-fit:contain;padding:5px}
+  .mini .tag{font-size:9px;font-weight:700;letter-spacing:.04em}
   .it-h .t{flex:1;min-width:0}
   .it-h .t b{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .it-h .t small{display:block;color:var(--gray);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -106,10 +128,11 @@
   .ic:hover{background:var(--nude)}
   .ic.del:hover{background:#f6e3e1;color:var(--err)}
   .ic[disabled]{opacity:.25;pointer-events:none}
-  .it-b{display:none;padding:4px 16px 18px;border-top:1px solid var(--line);padding-top:16px}
-  .it.open .it-b{display:block}
+  .it-b{display:none;padding:16px 16px 18px;border-top:1px solid var(--line)}
+  .it.open > .it-b{display:block}
   .add{width:100%;margin-top:10px;border:1.5px dashed rgba(27,46,73,.3);background:transparent;border-radius:var(--r);padding:14px;font-weight:600;color:var(--navy);font-size:13.5px}
   .add:hover{background:#fff;border-color:var(--navy)}
+  .empty{font-size:13px;color:var(--gray);padding:6px 4px}
 
   /* Ordem das seções */
   .ord{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:8px 8px 8px 14px;margin-bottom:8px;border:1px solid var(--line)}
@@ -117,11 +140,32 @@
   .ord input{flex:1;min-width:0;border:1px solid transparent;border-radius:10px;padding:8px 10px;background:transparent;font-weight:500}
   .ord input:hover,.ord input:focus{border-color:var(--line);background:var(--paper);outline:none}
   .ord.hidden{opacity:.55}
+  .ord small{font-size:10px;color:var(--gray);white-space:nowrap}
+
+  /* Biblioteca */
+  .lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+  .lib .comp{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:left;display:flex;flex-direction:column;gap:6px;transition:border-color .2s,transform .2s,box-shadow .2s}
+  .lib button.comp:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:0 10px 24px rgba(17,26,44,.08)}
+  .lib .comp .ci{width:42px;height:42px;border-radius:12px;background:var(--nude);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+  .lib .comp .ci svg{width:22px;height:22px}
+  .lib .comp b{font-size:14px}
+  .lib .comp span{font-size:12px;color:#5b6575;line-height:1.45}
+  .lib .comp select{margin-top:auto;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-size:12.5px}
+
+  /* Janela (modal) */
+  .modal{position:fixed;inset:0;z-index:90;background:rgba(17,26,44,.55);display:flex;align-items:center;justify-content:center;padding:18px;animation:fade .2s}
+  @keyframes fade{from{opacity:0}}
+  .modal .box{background:var(--paper);border-radius:28px;max-width:760px;width:100%;max-height:88vh;overflow:auto;padding:26px;position:relative;animation:up .25s}
+  @keyframes up{from{transform:translateY(12px);opacity:0}}
+  .modal h3{font-family:var(--serif);font-weight:400;font-size:26px;margin-bottom:4px}
+  .modal p.sub{font-size:13px;color:#5b6575;margin-bottom:18px}
+  .modal .x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:0;background:var(--nude);font-size:20px}
 
   /* Prévia */
   .prev{display:flex;flex-direction:column;min-width:0;min-height:0;background:#dcd6cc}
-  .prev-bar{display:flex;align-items:center;gap:8px;padding:10px 14px}
+  .prev-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;flex-wrap:wrap}
   .prev-bar .lbl{margin:0;flex:1}
+  .prev-bar .tip{width:100%;font-size:11.5px;color:#5b6575;margin:-2px 2px 0}
   .seg{display:inline-flex;background:rgba(255,255,255,.55);border-radius:999px;padding:3px}
   .seg button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--navy)}
   .seg button.on{background:var(--navy);color:var(--nude)}
@@ -160,11 +204,14 @@
     .body{grid-template-columns:1fr;grid-template-rows:auto 1fr}
     .side{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
     .side h4{display:none}
-    .side button{width:auto;flex:none;white-space:nowrap;padding:9px 14px;background:rgba(255,255,255,.5)}
+    .side button{width:auto;flex:none;white-space:nowrap;padding:9px 14px;background:rgba(255,255,255,.5);margin:0}
     .side button .off,.side button .dot{display:none}
     .editor{padding:20px 14px 100px}
     .editor h2{font-size:26px}
     .img-f{flex-direction:column;align-items:flex-start}
+    .two{grid-template-columns:1fr}
+    .modal{padding:0;align-items:flex-end}
+    .modal .box{border-radius:28px 28px 0 0;max-height:92vh;padding:22px 16px}
   }
   @media (min-width:761px){ .top .acts{display:flex;gap:8px} }
 </style>
@@ -189,6 +236,7 @@
         <span class="lbl">Prévia</span>
         <div class="seg" id="devSeg"><button data-dev="pc" class="on">Computador</button><button data-dev="phone">Celular</button></div>
         <button class="b navy sm prev-close" id="prevClose">Fechar</button>
+        <span class="tip">Dica: arraste os pássaros na prévia para mudar de lugar. Clique num pássaro para editar.</span>
       </div>
       <div class="stage" id="stage"><iframe id="frame" title="Prévia do site" src="index.html?preview=1"></iframe></div>
     </section>
@@ -199,8 +247,10 @@
 <script>
 (function(){
 'use strict';
+const MP = window.MP;
 const $ = (s, r=document) => r.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = MP.esc;
 const clone = o => JSON.parse(JSON.stringify(o));
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 function el(tag, attrs={}, ...kids){
@@ -210,7 +260,7 @@ function el(tag, attrs={}, ...kids){
     else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
     else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
   }
-  kids.flat().forEach(k => k != null && e.append(k.nodeType ? k : document.createTextNode(k)));
+  kids.flat().forEach(k => k != null && k !== '' && e.append(k.nodeType ? k : document.createTextNode(k)));
   return e;
 }
 function toast(msg, ms=3200){ const t = el('div',{class:'toast'}, msg); document.body.append(t); setTimeout(() => t.remove(), ms); }
@@ -218,7 +268,7 @@ const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
 function set(o, p, v){ const ks = p.split('.'); const last = ks.pop(); const t = ks.reduce((a, k) => (a[k] ??= {}), o); t[last] = v; }
 
 /* ═════════ Estado ═════════ */
-const S = { dados:null, publicado:null, painel:'capa', abertos:new Set(), temp:{} };
+const S = { dados:null, publicado:null, painel:'capa', abertos:new Set(), temp:{}, sel:null };
 const GH = {
   get token(){ try { return localStorage.getItem('mp-gh-token') || ''; } catch(e){ return ''; } },
   set token(v){ try { v ? localStorage.setItem('mp-gh-token', v) : localStorage.removeItem('mp-gh-token'); } catch(e){} },
@@ -235,89 +285,139 @@ const idb = (() => {
   return { get: k => tx('readonly', s => s.get(k)).catch(() => null), set: (k, v) => tx('readwrite', s => s.put(v, k)).catch(() => null), del: k => tx('readwrite', s => s.delete(k)).catch(() => null) };
 })();
 
+/* Completa o conteúdo com o que as versões novas do site esperam */
+function completar(d){
+  if (!d) return d;
+  d.secoes ??= [];
+  if (!d.enfeites) d.enfeites = clone(MP.ENFEITES_PADRAO);
+  ['capa','contagem','rodape'].forEach(id => d.enfeites[id] ??= []);
+  d.secoes.forEach(s => {
+    d.enfeites[s.id] ??= [];
+    if (s.tipo === 'livre') d[s.id] ??= { fundo:'auto', blocos:[] };
+  });
+  return d;
+}
+
 /* ═════════ Campos ═════════ */
-const ICONES = ['beija-flor-1-azul','beija-flor-2-azul','andorinha-azul','arvore-azul','monograma-azul'].map(n => `assets/${n}.png`);
 const T = (k, l, x={}) => ({ k, l, ...x });
 const A = (k, l, x={}) => ({ k, l, t:'area', ...x });
 const titulo = id => [T(`${id}.eyebrow`, 'Frase pequena acima do título'), T(`${id}.titulo`, 'Título', {dica:'Coloque entre *asteriscos* a parte que deve ficar em itálico.'})];
+const brl = v => Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const DESENHOS = Object.keys(MP.ARTES).flatMap(a => ['azul','creme'].map(c => MP.artePadrao(a, c)));
 
-const PAINEIS = [
-  { id:'capa', nome:'Capa e contagem', grupo:'Página', intro:'O topo do site: a primeira coisa que os convidados veem.', campos:[
-    T('capa.kicker','Frase de cima'),
-    T('capa.noiva','Primeiro nome', {dica:'Os nomes aparecem na capa, no convite e no rodapé.'}),
-    T('capa.noivo','Segundo nome'),
-    T('capa.data','Data em destaque'),
-    T('capa.local','Local'),
-    { k:'contagem.visivel', l:'Mostrar a contagem regressiva', t:'sim' },
-    T('contagem.titulo','Texto ao lado da contagem'),
-    { k:'config.dataEvento', l:'Dia e hora do casamento', t:'datahora', dica:'Usado na contagem regressiva.' },
-  ]},
-  { id:'convite', nome:'Convite', grupo:'Seções', secao:true, intro:'O convite que aparece ao lado do envelope.', campos:[
+/* Campos de um pássaro/enfeite */
+const ENF_CAMPOS = [
+  { k:'arte', l:'Desenho', t:'arte' },
+  { k:'voo', l:'Movimento', t:'select', opcoes:Object.entries(MP.VOOS) },
+  { k:'tamanho', l:'Tamanho', t:'numero', min:16, max:220, step:1, un:'px' },
+  { k:'espelhar', l:'Virar para o outro lado', t:'sim', padrao:false },
+  { k:'soPc', l:'Esconder no celular', t:'sim', padrao:false },
+  { t:'posicao' },
+];
+const enfLista = (sec, l='Pássaros e enfeites') => ({ k:`enfeites.${sec}`, l, t:'lista', item:'pássaro', enf:sec,
+  novo:() => ({ arte:'andorinha', cor:['contagem','rodape','confirmar'].includes(sec) || (S.dados[sec] && S.dados[sec].fundo === 'azul') ? 'creme' : 'azul', voo:'f1', tamanho:54, x:45, y:20, espelhar:false, soPc:false }),
+  resumo:i => [i.imagem ? 'Imagem própria' : (MP.ARTES[i.arte] || 'Desenho') + (i.cor === 'creme' ? ' (creme)' : ''), `${MP.VOOS[i.voo] || ''} · ${i.tamanho || 50}px${i.soPc ? ' · só no computador' : ''}`],
+  thumb:i => i.imagem || MP.artePadrao(i.arte, i.cor), icon:true, escuro:i => !i.imagem && i.cor === 'creme',
+  campos:ENF_CAMPOS, dica:'Arraste os pássaros na prévia para mudar de lugar. Na prévia de celular, a posição vale só para o celular.' });
+const blocosLista = (k, l) => ({ k, l, t:'blocos' });
+
+/* Seções prontas do site */
+const PRONTAS = {
+  convite: { nome:'Convite', intro:'O convite que aparece ao lado do envelope.', campos:[
     ...titulo('convite'), T('convite.linha1','Linha antes dos pais'), A('convite.pais','Nomes dos pais'),
     T('convite.linha2','Linha depois dos pais'), T('convite.data','Data por extenso'), T('convite.hora','Horário'),
     T('convite.local','Local'), A('convite.endereco','Endereço') ]},
-  { id:'nos', nome:'Nós (fotos)', grupo:'Seções', secao:true, intro:'Galeria de fotos de vocês. A seção só aparece no site quando tiver pelo menos uma foto.', campos:[
+  nos: { nome:'Nós (fotos)', intro:'Galeria de fotos de vocês. A seção só aparece no site quando tiver pelo menos uma foto (ou algum componente extra).', campos:[
     ...titulo('nos'), A('nos.texto','Texto'),
-    { k:'nos.fotos', l:'Fotos', t:'lista', item:'foto', novo:{ imagem:'', legenda:'' }, resumo:i => [i.legenda || 'Foto sem legenda', i.imagem ? '' : 'sem foto ainda'], img:'imagem',
+    { k:'nos.fotos', l:'Fotos', t:'lista', item:'foto', novo:{ imagem:'', legenda:'' }, resumo:i => [i.legenda || 'Foto sem legenda', i.imagem ? '' : 'sem foto ainda'], thumb:i => i.imagem,
       campos:[ { k:'imagem', l:'Foto', t:'imagem', max:1600 }, T('legenda','Legenda') ] } ]},
-  { id:'local', nome:'Local', grupo:'Seções', secao:true, intro:'Onde vai ser: texto, endereço, mapa e botões de rota.', campos:[
+  local: { nome:'Local', intro:'Onde vai ser: texto, endereço, mapa e botões de rota.', campos:[
     ...titulo('local'), A('local.texto','Texto', {dica:'Deixe uma linha em branco para separar os parágrafos.', rows:6}), A('local.endereco','Endereço'),
     T('config.mapaBusca','O que procurar no mapa', {dica:'O mapa do site mostra o resultado dessa busca no Google Maps.'}),
     T('local.linkMaps','Link do botão Google Maps', {t:'url'}), T('local.linkWaze','Link do botão Waze', {t:'url'}) ]},
-  { id:'programacao', nome:'Programação', grupo:'Seções', secao:true, intro:'Os momentos do dia, em ordem.', campos:[
+  programacao: { nome:'Programação', intro:'Os momentos do dia, em ordem.', campos:[
     ...titulo('programacao'),
     { k:'programacao.itens', l:'Momentos', t:'lista', item:'momento', novo:{ hora:'', titulo:'Novo momento', texto:'' }, resumo:i => [`${i.hora ? i.hora + ' · ' : ''}${i.titulo || ''}`, i.texto],
       campos:[ T('hora','Horário'), T('titulo','Nome'), A('texto','Descrição', {rows:2}) ] } ]},
-  { id:'menu', nome:'Menu', grupo:'Seções', secao:true, intro:'O cardápio do jantar.', campos:[
+  menu: { nome:'Menu', intro:'O cardápio do jantar.', campos:[
     ...titulo('menu'), T('menu.cartaoTitulo','Título do cartão'), T('menu.cartaoSub','Linha abaixo do título'), T('menu.cartaoData','Data no cartão'),
     { k:'menu.pratos', l:'Pratos', t:'lista', item:'prato', novo:{ titulo:'Novo prato', texto:'' }, resumo:i => [i.titulo, i.texto],
       campos:[ T('titulo','Nome'), A('texto','Descrição', {rows:3}) ] } ]},
-  { id:'detalhes', nome:'Detalhes', grupo:'Seções', secao:true, intro:'Informações úteis para os convidados: traje, horário, hospedagem…', campos:[
+  detalhes: { nome:'Detalhes', intro:'Informações úteis para os convidados: traje, horário, hospedagem…', campos:[
     ...titulo('detalhes'),
-    { k:'detalhes.itens', l:'Cartões', t:'lista', item:'cartão', novo:{ icone:ICONES[0], titulo:'Novo cartão', texto:'' }, resumo:i => [i.titulo, i.texto], img:'icone', icon:true,
-      campos:[ { k:'icone', l:'Desenho', t:'icone' }, T('titulo','Título'), A('texto','Texto', {rows:3}) ] } ]},
-  { id:'presentes', nome:'Presentes', grupo:'Seções', secao:true, intro:'A lista de presentes. Cada presente abre o QR Code do Pix com o valor já preenchido (configure a chave em “Contato e Pix”).', campos:[
+    { k:'detalhes.itens', l:'Cartões', t:'lista', item:'cartão', novo:{ icone:'i:heart', titulo:'Novo cartão', texto:'' }, resumo:i => [i.titulo, i.texto], thumb:i => i.icone, icon:true,
+      campos:[ { k:'icone', l:'Ícone ou desenho', t:'icone' }, T('titulo','Título'), A('texto','Texto', {rows:3}) ] } ]},
+  presentes: { nome:'Presentes', intro:'A lista de presentes. Cada presente abre o QR Code do Pix com o valor já preenchido (configure a chave em “Contato e Pix”).', campos:[
     ...titulo('presentes'), A('presentes.texto','Texto'),
     { k:'presentes.pixLivre', l:'Mostrar a opção “Pix livre” (valor que a pessoa escolhe)', t:'sim' },
-    { k:'presentes.itens', l:'Presentes', t:'lista', item:'presente', novo:{ nome:'Novo presente', descricao:'', valor:0, categoria:'', imagem:'', link:'' }, img:'imagem',
-      resumo:i => [i.nome, [i.categoria, Number(i.valor) ? Number(i.valor).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'sem valor'].filter(Boolean).join(' · ')],
+    { k:'presentes.itens', l:'Presentes', t:'lista', item:'presente', novo:{ nome:'Novo presente', descricao:'', valor:0, categoria:'', imagem:'', link:'' }, thumb:i => i.imagem,
+      resumo:i => [i.nome, [i.categoria, Number(i.valor) ? brl(i.valor) : 'sem valor'].filter(Boolean).join(' · ')],
       campos:[ T('nome','Nome do presente'), A('descricao','Descrição', {rows:2}), { k:'valor', l:'Valor', t:'dinheiro' },
         { k:'categoria', l:'Categoria', t:'categoria', dica:'Os presentes são agrupados por categoria (ex.: Casa, Lua de mel).' },
         { k:'imagem', l:'Imagem (opcional)', t:'imagem', max:900 },
         T('link','Link de uma loja (opcional)', {t:'url', dica:'Se preencher, aparece o botão “Ver na loja”.'}) ] } ]},
-  { id:'confirmar', nome:'Confirmação', grupo:'Seções', secao:true, intro:'O formulário de confirmação de presença. As respostas chegam no WhatsApp configurado em “Contato e Pix”.', campos:[
+  confirmar: { nome:'Confirmação', intro:'O formulário de confirmação de presença. As respostas chegam no WhatsApp configurado em “Contato e Pix”.', campos:[
     ...titulo('confirmar'), A('confirmar.texto','Texto', {rows:2}), A('confirmar.agradecimento','Mensagem depois de enviar', {rows:2}) ]},
-  { id:'rodape', nome:'Rodapé', grupo:'Página', intro:'O final da página.', campos:[ T('rodape.data','Data'), T('rodape.local','Local'), T('rodape.credito','Crédito') ]},
-  { id:'ordem', nome:'Ordem das seções', grupo:'Ajustes', intro:'Mude a ordem, esconda seções e escolha o nome de cada uma no menu do topo.', custom:() => painelOrdem() },
-  { id:'contato', nome:'Contato e Pix', grupo:'Ajustes', intro:'Para onde vão as confirmações e para quem vai o Pix dos presentes.', campos:[
+};
+const nomeSecao = s => PRONTAS[s.id] ? PRONTAS[s.id].nome : (s.menu || 'Seção nova');
+
+/* Todos os painéis, na ordem do menu lateral */
+function paineis(){
+  const L = [];
+  L.push({ id:'capa', nome:'Capa e contagem', grupo:'Página', intro:'O topo do site: a primeira coisa que os convidados veem.', campos:[
+    T('capa.kicker','Frase de cima'),
+    T('capa.noiva','Primeiro nome', {dica:'Os nomes aparecem na capa, no convite e no rodapé.'}),
+    T('capa.noivo','Segundo nome'), T('capa.data','Data em destaque'), T('capa.local','Local'),
+    { k:'contagem.visivel', l:'Mostrar a contagem regressiva', t:'sim' },
+    T('contagem.titulo','Texto ao lado da contagem'),
+    { k:'config.dataEvento', l:'Dia e hora do casamento', t:'datahora', dica:'Usado na contagem regressiva.' } ],
+    extras:[ enfLista('capa', 'Pássaros da capa'), enfLista('contagem', 'Pássaros da faixa da contagem') ] });
+  (S.dados.secoes || []).forEach(s => {
+    const p = PRONTAS[s.id];
+    if (p) L.push({ id:s.id, nome:p.nome, grupo:'Seções', secao:true, intro:p.intro, campos:p.campos,
+      extras:[ blocosLista(`${s.id}.blocos`, 'Componentes extras (no fim da seção)'), enfLista(s.id) ] });
+    else if (s.tipo === 'livre') L.push({ id:s.id, nome:s.menu || 'Seção nova', grupo:'Seções', secao:true, livre:true,
+      intro:'Uma seção montada por vocês com os componentes da biblioteca.', campos:[],
+      extras:[ blocosLista(`${s.id}.blocos`, 'Componentes'), enfLista(s.id) ] });
+  });
+  L.push({ id:'rodape', nome:'Rodapé', grupo:'Página', intro:'O final da página.', campos:[ T('rodape.data','Data'), T('rodape.local','Local'), T('rodape.credito','Crédito') ],
+    extras:[ enfLista('rodape', 'Pássaros do rodapé') ] });
+  L.push({ id:'biblioteca', nome:'Biblioteca', grupo:'Ajustes', intro:'Todos os componentes, ícones e desenhos que podem ser usados no site.', custom:painelBiblioteca });
+  L.push({ id:'ordem', nome:'Ordem das seções', grupo:'Ajustes', intro:'Mude a ordem, esconda seções e escolha o nome de cada uma no menu do topo.', custom:painelOrdem });
+  L.push({ id:'contato', nome:'Contato e Pix', grupo:'Ajustes', intro:'Para onde vão as confirmações e para quem vai o Pix dos presentes.', campos:[
     T('config.whatsapp','WhatsApp que recebe as confirmações', {t:'tel', dica:'Com DDD, ex.: <b>34 99999-8888</b>.'}),
-    T('config.pixChave','Chave Pix', {dica:'CPF, e-mail, chave aleatória ou celular. Se for celular, escreva com +55, ex.: <b>+5534999998888</b>.'}),
+    T('config.pixChave','Chave Pix', {dica:'CPF, e-mail, chave aleatória ou celular. Se for celular, escreva com +55, ex.: <b>+5534999998888</b>.', aviso:'pix'}),
     T('config.pixNome','Nome de quem recebe o Pix'),
-    T('config.pixCidade','Cidade de quem recebe o Pix') ]},
-  { id:'publicar', nome:'Publicação', grupo:'Ajustes', intro:'Ligue o painel ao site uma vez e depois é só clicar em “Publicar no site”.', custom:() => painelPublicar() },
-];
+    T('config.pixCidade','Cidade de quem recebe o Pix') ]});
+  L.push({ id:'publicar', nome:'Publicação', grupo:'Ajustes', intro:'Ligue o painel ao site uma vez e depois é só clicar em “Publicar no site”.', custom:painelPublicar });
+  return L;
+}
+const painelAtual = () => paineis().find(p => p.id === S.painel) || paineis()[0];
 const secMeta = id => (S.dados.secoes || []).find(s => s.id === id);
 
 /* ═════════ Menu lateral ═════════ */
 function renderSide(){
-  const side = $('#side'); side.innerHTML = ''; let g = '';
-  PAINEIS.forEach(p => {
-    if (p.grupo !== g){ g = p.grupo; side.append(el('h4', {}, g)); }
+  const side = $('#side'); side.innerHTML = ''; let g = '', pos = 0;
+  paineis().forEach(p => {
+    if (p.grupo !== g){
+      if (g === 'Seções') side.append(el('button', { class:'nova', onclick:novaSecao }, '+ Nova seção'));
+      g = p.grupo; side.append(el('h4', {}, g));
+    }
     const m = p.secao && secMeta(p.id);
     const pend = p.id === 'publicar' && !GH.token;
     side.append(el('button', { class: S.painel === p.id ? 'on' : '', onclick:() => abrir(p.id) }, p.nome,
       m && m.visivel === false ? el('span', {class:'off'}, 'oculta') : null, pend ? el('span', {class:'dot', title:'Falta ligar ao GitHub'}) : null));
   });
 }
-function abrir(id){
+function abrir(id, semIr){
   S.painel = id; renderSide(); renderEditor(); $('#editor').scrollTop = 0;
-  const p = PAINEIS.find(x => x.id === id);
-  if (p.secao || id === 'capa' || id === 'rodape') post({ tipo:'ir', id: id === 'capa' ? 'capa' : id });
+  const p = painelAtual();
+  if (!semIr && (p.secao || id === 'capa' || id === 'rodape')) post({ tipo:'ir', id });
 }
 
 /* ═════════ Editor ═════════ */
 function renderEditor(){
-  const p = PAINEIS.find(x => x.id === S.painel);
+  const p = painelAtual();
   const ed = $('#editor'); const top = ed.scrollTop; ed.innerHTML = '';
   ed.append(el('h2', {}, p.nome), el('p', {class:'intro'}, p.intro || ''));
   if (S.aviso) ed.append(S.aviso);
@@ -325,32 +425,49 @@ function renderEditor(){
     const m = secMeta(p.id);
     if (m) ed.append(el('div', {class:'card'},
       swField(m.visivel !== false, v => { m.visivel = v; mudou(); renderSide(); }, 'Mostrar esta seção no site'),
-      el('div', {class:'f', style:'margin-top:16px'}, el('label', {}, 'Nome no menu do topo'), inputText(m.menu, v => { m.menu = v; mudou(); }))));
+      el('div', {class:'f', style:'margin-top:16px'}, el('label', {}, 'Nome no menu do topo'), inputText(m.menu, v => { m.menu = v; mudou(); if (p.livre) renderSide(); })),
+      p.livre ? el('div', {class:'f'}, el('label', {}, 'Fundo da seção'), selectEl([['auto','Automático (alterna claro e creme)'],['claro','Claro'],['creme','Creme'],['azul','Azul com desenhos']], S.dados[p.id].fundo || 'auto', v => { S.dados[p.id].fundo = v; mudou(); })) : null));
   }
   if (p.custom) ed.append(p.custom());
-  else {
+  else if (p.campos.length){
     const card = el('div', {class:'card'});
-    p.campos.forEach(c => { if (c.t === 'lista') ed.append(campo(c, S.dados)); else card.append(campo(c, S.dados)); });
-    if (card.childNodes.length) ed.insertBefore(card, ed.querySelector('.f.lista') || null);
+    const listas = [];
+    p.campos.forEach(c => c.t === 'lista' ? listas.push(c) : card.append(campo(c, S.dados, '')));
+    if (card.childNodes.length) ed.append(card);
+    listas.forEach(c => ed.append(campo(c, S.dados, '')));
   }
+  (p.extras || []).forEach(c => ed.append(el('h3', {class:'grp'}, c.l), campo(Object.assign({}, c, {semRotulo:true}), S.dados, '')));
+  if (p.livre) ed.append(el('div', {style:'margin-top:30px'}, el('button', {class:'b danger', type:'button', onclick:() => apagarSecao(p.id)}, 'Apagar esta seção')));
   ed.scrollTop = top;
 }
 
 function inputText(v, on, type='text', extra={}){
   return el('input', { type, value: v ?? '', oninput: e => on(e.target.value), ...extra });
 }
+function selectEl(opcoes, v, on){
+  const s = el('select', { onchange:e => on(e.target.value) }, ...opcoes.map(([val, l]) => el('option', {value:val}, l)));
+  s.value = v; return s;
+}
 function swField(v, on, label){
   const inp = el('input', { type:'checkbox', onchange: e => on(e.target.checked) }); inp.checked = !!v;
   return el('label', {class:'sw'}, inp, el('i'), label);
 }
-function campo(c, obj){
-  const v = get(obj, c.k);
+function rangeEl(v, c, on){
+  const out = el('output', {}, `${v}${c.un || ''}`);
+  const r = el('input', { type:'range', min:c.min, max:c.max, step:c.step || 1, value:v, oninput:e => { out.textContent = e.target.value + (c.un || ''); on(parseFloat(e.target.value)); } });
+  return el('div', {class:'rng'}, r, out);
+}
+function campo(c, obj, ns){
+  const v = c.k ? get(obj, c.k) : undefined;
   const upd = val => { set(obj, c.k, val); mudou(); };
-  const wrap = el('div', {class:'f' + (c.t === 'lista' ? ' lista' : '')});
+  const wrap = el('div', {class:'f'});
   const dica = c.dica ? el('p', {class:'hint', html:c.dica}) : '';
   switch (c.t){
-    case 'sim': wrap.append(swField(v !== false, upd, c.l), dica); return wrap;
+    case 'sim': wrap.append(swField(v === undefined ? (c.padrao ?? true) : !!v, upd, c.l), dica); return wrap;
     case 'area': wrap.append(el('label', {}, c.l), el('textarea', { rows:c.rows || 3, oninput:e => upd(e.target.value) }, v ?? ''), dica); return wrap;
+    case 'select': wrap.append(el('label', {}, c.l), selectEl(c.opcoes, v ?? c.opcoes[0][0], val => { upd(val); }), dica); return wrap;
+    case 'numero': wrap.append(el('label', {}, c.l), rangeEl(v ?? c.min, c, upd), dica); return wrap;
+    case 'posicao': return campoPosicao(obj, wrap);
     case 'datahora': {
       const local = String(v || '').slice(0, 16);
       wrap.append(el('label', {}, c.l), inputText(local, x => upd(x ? x + ':00-03:00' : ''), 'datetime-local'), dica); return wrap; }
@@ -363,10 +480,24 @@ function campo(c, obj){
       const cats = [...new Set((S.dados.presentes?.itens || []).map(g => g.categoria).filter(Boolean))];
       const id = 'dl' + Math.random().toString(36).slice(2);
       wrap.append(el('label', {}, c.l), inputText(v, upd, 'text', { list:id }), el('datalist', {id}, ...cats.map(x => el('option', {value:x}))), dica); return wrap; }
-    case 'imagem': case 'icone': return campoImagem(c, obj, wrap, dica);
-    case 'lista': return campoLista(c, obj, wrap);
-    default: wrap.append(el('label', {}, c.l), inputText(v, upd, c.t || 'text'), dica); return wrap;
+    case 'imagem': return campoImagem(c, obj, wrap, dica);
+    case 'icone': return campoIcone(c, obj, wrap, dica);
+    case 'arte': return campoArte(obj, wrap);
+    case 'lista': return campoLista(c, obj, wrap, ns);
+    case 'blocos': return campoBlocos(c, obj, wrap, ns);
+    default: {
+      const aviso = c.aviso === 'pix' ? el('p', {class:'hint', style:'color:var(--err);font-weight:600'}, problemaPix(v)) : '';
+      wrap.append(el('label', {}, c.l), inputText(v, val => { upd(val); if (aviso) aviso.textContent = problemaPix(val); }, c.t || 'text'), dica, aviso);
+      return wrap; }
   }
+}
+/* Celular sem +55 vira CPF para o banco: avisa */
+function problemaPix(k){
+  const s = String(k || '').trim(); if (!s) return '';
+  const dig = s.replace(/\D/g, '');
+  if (!/[@a-z]/i.test(s) && !s.startsWith('+') && dig.length === 11 && /^\d{2}9/.test(dig) && /[\s()-]|^\d+$/.test(s))
+    return `Se essa chave for o seu celular, escreva +55${dig}. Sem o +55 o banco entende como CPF e o Pix não funciona.`;
+  return '';
 }
 function parseMoney(x){
   let s = String(x).replace(/[^\d.,]/g, '');
@@ -375,22 +506,69 @@ function parseMoney(x){
   const n = parseFloat(s); return isNaN(n) ? 0 : Math.round(n * 100) / 100;
 }
 const showSrc = s => S.temp[s] || s;
+/* Miniatura de um ícone (i:nome), desenho ou foto */
+function miniArte(v){
+  v = String(v || '');
+  if (v.startsWith('i:')) return el('span', { html: MP.arte(v), style:'display:contents' });
+  return v ? el('img', {src:showSrc(v), alt:''}) : null;
+}
 
-function campoImagem(c, obj, wrap, dica){
-  const v = get(obj, c.k) || '';
-  const isIcon = c.t === 'icone';
-  const thumb = el('div', {class:'thumb' + (isIcon ? ' icon' : '')}, v ? el('img', {src:showSrc(v), alt:''}) : null);
+function botaoArquivo(texto, max, png, on){
   const file = el('input', { type:'file', accept:'image/*', style:'display:none', onchange: async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const url = await reduzir(f, c.max || (isIcon ? 400 : 1600), isIcon); set(obj, c.k, url); mudou(); renderEditor(); }
-    catch(err){ toast('Não consegui abrir essa imagem. Tente outra (JPG ou PNG).'); }
+    try { on(await reduzir(f, max, png)); } catch(err){ toast('Não consegui abrir essa imagem. Tente outra (JPG ou PNG).'); }
   }});
-  const acts = el('div', {class:'acts'},
-    el('button', {class:'b soft sm', type:'button', onclick:() => file.click()}, v ? 'Trocar imagem' : 'Escolher imagem'),
-    v ? el('button', {class:'b line sm', type:'button', onclick:() => { set(obj, c.k, ''); mudou(); renderEditor(); }}, 'Remover') : null, file);
-  wrap.append(el('label', {}, c.l), el('div', {class:'img-f'}, thumb, acts));
-  if (isIcon) wrap.append(el('div', {class:'icons'}, ...ICONES.map(src => el('button', { type:'button', class: v === src ? 'on' : '', title:'Usar este desenho', onclick:() => { set(obj, c.k, src); mudou(); renderEditor(); } }, el('img', {src, alt:''})))));
-  if (dica) wrap.append(dica);
+  return [el('button', {class:'b soft sm', type:'button', onclick:() => file.click()}, texto), file];
+}
+function campoImagem(c, obj, wrap, dica){
+  const v = get(obj, c.k) || '';
+  wrap.append(el('label', {}, c.l), el('div', {class:'img-f'},
+    el('div', {class:'thumb'}, v ? el('img', {src:showSrc(v), alt:''}) : null),
+    el('div', {class:'acts'}, ...botaoArquivo(v ? 'Trocar imagem' : 'Escolher imagem', c.max || 1600, false, url => { set(obj, c.k, url); mudou(); renderEditor(); }),
+      v ? el('button', {class:'b line sm', type:'button', onclick:() => { set(obj, c.k, ''); mudou(); renderEditor(); }}, 'Remover') : null)), dica);
+  return wrap;
+}
+/* Ícone: ícones de linha, desenhos da identidade ou imagem enviada */
+function campoIcone(c, obj, wrap, dica){
+  const v = get(obj, c.k) || '';
+  const tab = S.tabIcone || (v.startsWith('i:') ? 'icones' : 'desenhos');
+  const escolher = val => { set(obj, c.k, val); mudou(); renderEditor(); };
+  const grade = tab === 'icones'
+    ? Object.entries(MP.ICONES).map(([n, [l]]) => el('button', { type:'button', class:'pick' + (v === 'i:' + n ? ' on' : ''), title:l, onclick:() => escolher('i:' + n) }, miniArte('i:' + n)))
+    : DESENHOS.map(src => el('button', { type:'button', class:'pick' + (v === src ? ' on' : '') + (src.includes('creme') ? ' escuro' : ''), title:(MP.ARTES[src.slice(7).replace(/-(azul|creme)\.png$/, '')] || '') + (src.includes('creme') ? ' (creme)' : ''), onclick:() => escolher(src) }, el('img', {src, alt:''})));
+  wrap.append(el('label', {}, c.l), el('div', {class:'img-f'},
+    el('div', {class:'thumb icon' + (v.includes('-creme.') ? ' escuro' : '')}, miniArte(v)),
+    el('div', {class:'acts'}, ...botaoArquivo('Enviar imagem', 500, true, escolher), v ? el('button', {class:'b line sm', type:'button', onclick:() => escolher('')}, 'Sem ícone') : null)),
+    el('div', {class:'tabs'}, ...[['icones','Ícones de linha'],['desenhos','Desenhos do convite']].map(([k, l]) => el('button', { type:'button', class: tab === k ? 'on' : '', onclick:() => { S.tabIcone = k; renderEditor(); } }, l))),
+    el('div', {class:'icons'}, ...grade), dica);
+  return wrap;
+}
+/* Desenho de um pássaro/enfeite */
+function campoArte(it, wrap){
+  const escolher = (arte) => { it.arte = arte; delete it.imagem; mudou(); renderEditor(); };
+  const cor = it.cor === 'creme' ? 'creme' : 'azul';
+  wrap.append(el('label', {}, 'Desenho'),
+    el('div', {class:'icons'}, ...Object.entries(MP.ARTES).map(([a, l]) => el('button', { type:'button', title:l, class:'pick' + (!it.imagem && it.arte === a ? ' on' : '') + (cor === 'creme' ? ' escuro' : ''), onclick:() => escolher(a) }, el('img', {src:MP.artePadrao(a, cor), alt:''})))),
+    el('div', {style:'display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px'},
+      el('div', {class:'tabs', style:'margin:0'}, ...[['azul','Azul'],['creme','Creme']].map(([k, l]) => el('button', { type:'button', class: cor === k ? 'on' : '', onclick:() => { it.cor = k; mudou(); renderEditor(); } }, l))),
+      ...botaoArquivo(it.imagem ? 'Trocar imagem própria' : 'Usar imagem própria', 500, true, url => { it.imagem = url; mudou(); renderEditor(); }),
+      it.imagem ? el('button', {class:'b line sm', type:'button', onclick:() => { delete it.imagem; mudou(); renderEditor(); }}, 'Voltar aos desenhos') : null),
+    el('p', {class:'hint'}, 'Use creme em fundos azuis. Uma imagem própria em PNG com fundo transparente fica melhor.'));
+  return wrap;
+}
+/* Posição: computador e celular */
+function campoPosicao(it, wrap){
+  const lin = (l, k, kb) => {
+    const herda = kb && (it[k] === undefined || it[k] === '' || it[k] === null);
+    const v = herda ? it[kb] : it[k];
+    return el('div', {class:'f'}, el('label', {}, l + (herda ? ' · igual ao computador' : '')),
+      rangeEl(Math.round((v ?? 0) * 10) / 10, { min:-5, max:100, step:.5, un:'%' }, x => { it[k] = x; mudou(); }));
+  };
+  const temCel = ['xm','ym'].some(k => it[k] !== undefined && it[k] !== '' && it[k] !== null);
+  wrap.append(el('div', {class:'two'}, lin('Horizontal (computador)', 'x'), lin('Vertical (computador)', 'y')),
+    el('div', {class:'two'}, lin('Horizontal (celular)', 'xm', 'x'), lin('Vertical (celular)', 'ym', 'y')),
+    temCel ? el('button', {class:'b line sm', type:'button', onclick:() => { delete it.xm; delete it.ym; mudou(); renderEditor(); }}, 'Celular igual ao computador') : '',
+    el('p', {class:'hint'}, 'Mais fácil: arraste o pássaro na prévia. Para mudar a posição no celular, troque a prévia para “Celular”.'));
   return wrap;
 }
 function reduzir(file, max, keepPng){
@@ -401,58 +579,144 @@ function reduzir(file, max, keepPng){
       const k = Math.min(1, max / Math.max(img.width, img.height));
       const cv = document.createElement('canvas'); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
       cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
-      res(keepPng || file.type === 'image/png' && max <= 400 ? cv.toDataURL('image/png') : cv.toDataURL('image/jpeg', .85));
+      res(keepPng && file.type === 'image/png' ? cv.toDataURL('image/png') : cv.toDataURL('image/jpeg', .85));
     }; img.src = r.result; };
     r.readAsDataURL(file);
   });
 }
 
-function campoLista(c, obj, wrap){
-  const arr = get(obj, c.k) || (set(obj, c.k, []), get(obj, c.k));
-  wrap.append(el('div', {class:'lbl'}, `${c.l} (${arr.length})`));
+/* Lista genérica: itens que abrem e fecham, com subir, descer, duplicar e apagar */
+function listaBase(arr, ns, k, opts){
   const list = el('div', {class:'list'});
   arr.forEach((it, i) => {
-    const key = c.k + ':' + i;
+    const key = ns + k + ':' + i;
     const open = S.abertos.has(key);
-    const [t1, t2] = c.resumo(it);
-    const src = c.img && it[c.img];
+    const [t1, t2] = opts.resumo(it);
     const move = (d, ev) => { ev.stopPropagation(); const j = i + d; [arr[i], arr[j]] = [arr[j], arr[i]]; S.abertos.clear(); mudou(); renderEditor(); };
     const body = el('div', {class:'it-b'});
-    if (open) c.campos.forEach(f => body.append(campo(f, it)));
-    list.append(el('div', {class:'it' + (open ? ' open' : '')},
-      el('div', {class:'it-h', onclick:() => { open ? S.abertos.delete(key) : S.abertos.add(key); renderEditor(); }},
-        c.img ? el('div', {class:'mini' + (c.icon ? ' icon' : '')}, src ? el('img', {src:showSrc(src), alt:''}) : null) : null,
-        el('div', {class:'t'}, el('b', {}, t1 || `(${c.item} sem nome)`), t2 ? el('small', {}, t2) : null),
+    if (open) opts.corpo(it, body, key + '/');
+    const th = opts.thumb ? opts.thumb(it) : undefined;
+    list.append(el('div', {class:'it' + (open ? ' open' : ''), 'data-key':key},
+      el('div', {class:'it-h', onclick:() => { if (open) S.abertos.delete(key); else { S.abertos.add(key); opts.aoAbrir && opts.aoAbrir(i); } renderEditor(); }},
+        th !== undefined ? el('div', {class:'mini' + (opts.icon ? ' icon' : '') + (opts.escuro && opts.escuro(it) ? ' escuro' : '')}, opts.miniEl ? opts.miniEl(it) : miniArte(th)) : null,
+        el('div', {class:'t'}, el('b', {}, t1 || `(${opts.item} sem nome)`), t2 ? el('small', {}, t2) : null),
         el('div', {class:'ctl'},
           el('button', {class:'ic', title:'Subir', type:'button', disabled: i === 0, onclick:e => move(-1, e)}, '↑'),
           el('button', {class:'ic', title:'Descer', type:'button', disabled: i === arr.length - 1, onclick:e => move(1, e)}, '↓'),
-          el('button', {class:'ic', title:'Duplicar', type:'button', onclick:e => { e.stopPropagation(); arr.splice(i + 1, 0, clone(it)); S.abertos.clear(); S.abertos.add(c.k + ':' + (i + 1)); mudou(); renderEditor(); }}, '⧉'),
-          el('button', {class:'ic del', title:'Apagar', type:'button', onclick:e => { e.stopPropagation(); if (!confirm(`Apagar “${t1 || c.item}”?`)) return; arr.splice(i, 1); S.abertos.clear(); mudou(); renderEditor(); }}, '✕'))),
+          el('button', {class:'ic', title:'Duplicar', type:'button', onclick:e => { e.stopPropagation(); arr.splice(i + 1, 0, clone(it)); S.abertos.clear(); S.abertos.add(ns + k + ':' + (i + 1)); mudou(); renderEditor(); }}, '⧉'),
+          el('button', {class:'ic del', title:'Apagar', type:'button', onclick:e => { e.stopPropagation(); if (!confirm(`Apagar “${t1 || opts.item}”?`)) return; arr.splice(i, 1); S.abertos.clear(); mudou(); renderEditor(); }}, '✕'))),
       body));
   });
-  wrap.append(list, el('button', {class:'add', type:'button', onclick:() => { arr.push(clone(c.novo)); S.abertos.clear(); S.abertos.add(c.k + ':' + (arr.length - 1)); mudou(); renderEditor(); setTimeout(() => { const ed = $('#editor'); ed.scrollTop = ed.scrollHeight; }, 0); }}, `+ Adicionar ${c.item}`));
-  // Atualiza o resumo do item aberto enquanto digita
+  return list;
+}
+function campoLista(c, obj, wrap, ns){
+  let arr = get(obj, c.k); if (!Array.isArray(arr)){ arr = []; set(obj, c.k, arr); }
+  if (!c.semRotulo) wrap.append(el('div', {class:'lbl'}, `${c.l} (${arr.length})`));
+  if (c.dica) wrap.append(el('p', {class:'hint', style:'margin:-2px 4px 10px'}, c.dica));
+  const list = listaBase(arr, ns, c.k, { item:c.item, resumo:c.resumo, thumb:c.thumb, icon:c.icon, escuro:c.escuro,
+    corpo:(it, body, ns2) => c.campos.forEach(f => body.append(campo(f, it, ns2))),
+    aoAbrir: c.enf ? i => { S.sel = { sec:c.enf, i }; post({ tipo:'marcar', sec:c.enf, i, rolar:true }); } : null });
+  if (!arr.length && c.enf) wrap.append(el('p', {class:'empty'}, 'Nenhum pássaro aqui ainda.'));
+  wrap.append(list, el('button', {class:'add', type:'button', onclick:() => {
+    const n = typeof c.novo === 'function' ? c.novo() : clone(c.novo);
+    arr.push(n); S.abertos.clear(); S.abertos.add(ns + c.k + ':' + (arr.length - 1)); mudou(); renderEditor();
+    if (c.enf){ S.sel = { sec:c.enf, i:arr.length - 1 }; setTimeout(() => post({ tipo:'marcar', sec:c.enf, i:arr.length - 1, rolar:true }), 400); }
+    rolarPara(ns + c.k + ':' + (arr.length - 1));
+  }}, `+ Adicionar ${c.item}`));
+  // atualiza o resumo enquanto digita
   wrap.addEventListener('input', () => { clearTimeout(wrap._t); wrap._t = setTimeout(() => {
-    wrap.querySelectorAll(':scope > .list > .it').forEach((n, i) => { const [a, b] = c.resumo(arr[i] || {}); n.querySelector('.t b').textContent = a || `(${c.item} sem nome)`; const s = n.querySelector('.t small'); if (s) s.textContent = b || ''; });
+    list.querySelectorAll(':scope > .it').forEach((n, i) => { const [a, b] = c.resumo(arr[i] || {}); n.querySelector(':scope > .it-h .t b').textContent = a || `(${c.item} sem nome)`; const s = n.querySelector(':scope > .it-h .t small'); if (s) s.textContent = b || ''; });
   }, 300); });
   return wrap;
+}
+function rolarPara(key){ setTimeout(() => { const n = document.querySelector(`[data-key="${CSS.escape(key)}"]`); if (n) n.scrollIntoView({behavior:'smooth', block:'center'}); }, 30); }
+
+/* Lista de componentes da biblioteca */
+function campoBlocos(c, obj, wrap, ns){
+  let arr = get(obj, c.k); if (!Array.isArray(arr)){ arr = []; set(obj, c.k, arr); }
+  if (!arr.length) wrap.append(el('p', {class:'empty'}, 'Nenhum componente ainda. Adicione títulos, textos, fotos, cartões, perguntas…'));
+  wrap.append(listaBase(arr, ns, c.k, { item:'componente',
+    resumo:b => { const d = MP.BLOCOS[b.tipo]; const r = d && d.resumo ? d.resumo(b) : []; return [d ? d.nome : 'Componente', r.filter(Boolean).join(' · ')]; },
+    thumb:b => (MP.BLOCOS[b.tipo] || {}).icone || '', icon:true,
+    corpo:(b, body, ns2) => (MP.BLOCOS[b.tipo]?.campos || []).forEach(f => body.append(campo(f, b, ns2))) }),
+    el('button', {class:'add', type:'button', onclick:() => escolherComponente(tipo => {
+      arr.push(MP.novoBloco(tipo)); S.abertos.clear(); S.abertos.add(ns + c.k + ':' + (arr.length - 1)); mudou(); renderEditor(); rolarPara(ns + c.k + ':' + (arr.length - 1));
+      setTimeout(() => post({ tipo:'ir', id:S.painel }), 450);
+    })}, '+ Adicionar componente'));
+  return wrap;
+}
+
+/* ═════════ Janelas: biblioteca e seção nova ═════════ */
+function janela(titulo, sub, conteudo){
+  const m = el('div', {class:'modal', onclick:e => { if (e.target === m) m.remove(); }},
+    el('div', {class:'box'}, el('button', {class:'x', type:'button', onclick:() => m.remove()}, '×'), el('h3', {}, titulo), el('p', {class:'sub'}, sub), conteudo));
+  document.body.append(m); return m;
+}
+const cartaoComp = (icone, nome, desc, extra) => [el('div', {class:'ci', html:MP.arte(icone)}), el('b', {}, nome), el('span', {}, desc), extra];
+function escolherComponente(cb){
+  const m = janela('Biblioteca de componentes', 'Escolha o que adicionar. Depois é só preencher.',
+    el('div', {class:'lib'}, ...Object.entries(MP.BLOCOS).map(([tipo, d]) => el('button', {class:'comp', type:'button', onclick:() => { m.remove(); cb(tipo); }}, ...cartaoComp(d.icone, d.nome, d.desc)))));
+}
+function novaSecao(){
+  const m = janela('Nova seção', 'Comece de um modelo. Tudo pode ser mudado depois.',
+    el('div', {class:'lib'}, ...MP.MODELOS.map(md => el('button', {class:'comp', type:'button', onclick:() => {
+      m.remove();
+      const id = 's' + Date.now().toString(36);
+      const secs = S.dados.secoes; const iConf = secs.findIndex(s => s.id === 'confirmar');
+      secs.splice(iConf < 0 ? secs.length : iConf, 0, { id, menu:md.menu, visivel:true, tipo:'livre' });
+      S.dados[id] = md.dados(); S.dados.enfeites[id] = [];
+      mudou(); abrir(id); setTimeout(() => post({ tipo:'ir', id }), 500);
+      toast('Seção criada. Ela entrou antes da confirmação; mude a ordem em “Ordem das seções”.', 5000);
+    }}, ...cartaoComp(md.icone, md.nome, md.desc)))));
+}
+function apagarSecao(id){
+  const s = secMeta(id);
+  if (!confirm(`Apagar a seção “${s.menu || 'sem nome'}” e tudo o que tem nela?`)) return;
+  S.dados.secoes = S.dados.secoes.filter(x => x.id !== id);
+  delete S.dados[id]; delete S.dados.enfeites[id];
+  mudou(); abrir('capa');
+}
+
+function painelBiblioteca(){
+  const box = el('div');
+  const destinos = (S.dados.secoes || []).map(s => [s.id, nomeSecao(s)]);
+  box.append(el('h3', {class:'grp', style:'margin-top:0'}, 'Componentes'),
+    el('p', {class:'hint', style:'margin:-4px 4px 12px'}, 'Escolha a seção e clique em “Adicionar”. Também dá para adicionar pelo botão “+ Adicionar componente” dentro de cada seção, ou criar uma seção inteira com “+ Nova seção”.'),
+    el('div', {class:'lib'}, ...Object.entries(MP.BLOCOS).map(([tipo, d]) => {
+      const sel = selectEl(destinos, destinos[0] && destinos[0][0], () => {});
+      return el('div', {class:'comp'}, ...cartaoComp(d.icone, d.nome, d.desc),
+        el('div', {style:'display:flex;gap:6px;margin-top:auto;padding-top:8px'}, sel,
+          el('button', {class:'b navy sm', type:'button', onclick:() => {
+            const id = sel.value; S.dados[id] ??= {}; S.dados[id].blocos ??= [];
+            const arr = S.dados[id].blocos; arr.push(MP.novoBloco(tipo));
+            mudou(); S.abertos.clear(); S.abertos.add(`${id}.blocos:${arr.length - 1}`); abrir(id); rolarPara(`${id}.blocos:${arr.length - 1}`);
+          }}, 'Adicionar')));
+    })));
+  box.append(el('h3', {class:'grp'}, `Ícones de linha (${Object.keys(MP.ICONES).length})`),
+    el('p', {class:'hint', style:'margin:-4px 4px 12px'}, 'Disponíveis nos cartões de “Detalhes”, nos “Cartões com ícone” e nos divisores.'),
+    el('div', {class:'icons', style:'max-height:none'}, ...Object.entries(MP.ICONES).map(([n, [l]]) => el('div', {class:'pick', title:l}, miniArte('i:' + n)))));
+  box.append(el('h3', {class:'grp'}, 'Desenhos do convite'),
+    el('p', {class:'hint', style:'margin:-4px 4px 12px'}, 'Viram pássaros e enfeites em qualquer seção (veja “Pássaros e enfeites” no fim de cada seção) e também podem ser ícones.'),
+    el('div', {class:'icons', style:'max-height:none'}, ...DESENHOS.map(src => el('div', {class:'pick' + (src.includes('creme') ? ' escuro' : '')}, el('img', {src, alt:''})))));
+  return box;
 }
 
 function painelOrdem(){
   const box = el('div');
   const arr = S.dados.secoes;
-  const nomes = Object.fromEntries(PAINEIS.map(p => [p.id, p.nome]));
   arr.forEach((s, i) => {
-    const mv = d => { const j = i + d; [arr[i], arr[j]] = [arr[j], arr[i]]; mudou(); renderEditor(); };
+    const mv = d => { const j = i + d; [arr[i], arr[j]] = [arr[j], arr[i]]; mudou(); renderEditor(); renderSide(); };
     const sw = el('input', {type:'checkbox', onchange:e => { s.visivel = e.target.checked; mudou(); renderEditor(); renderSide(); }}); sw.checked = s.visivel !== false;
     box.append(el('div', {class:'ord' + (s.visivel === false ? ' hidden' : '')},
       el('span', {class:'n'}, i + 1),
-      inputText(s.menu, v => { s.menu = v; mudou(); }, 'text', {title:`Nome no menu (${nomes[s.id] || s.id})`}),
+      inputText(s.menu, v => { s.menu = v; mudou(); }, 'text', {title:`Nome no menu (${nomeSecao(s)})`}),
+      s.tipo === 'livre' ? el('small', {}, 'sua seção') : null,
       el('label', {class:'sw', title:'Mostrar no site'}, sw, el('i')),
       el('button', {class:'ic', type:'button', title:'Subir', disabled:i === 0, onclick:() => mv(-1)}, '↑'),
       el('button', {class:'ic', type:'button', title:'Descer', disabled:i === arr.length - 1, onclick:() => mv(1)}, '↓')));
   });
-  box.append(el('p', {class:'hint'}, 'A capa e a contagem ficam sempre no topo, e o rodapé sempre no fim.'));
+  box.append(el('button', {class:'add', type:'button', onclick:novaSecao}, '+ Nova seção'),
+    el('p', {class:'hint'}, 'A capa e a contagem ficam sempre no topo, e o rodapé sempre no fim.'));
   return box;
 }
 
@@ -490,7 +754,7 @@ function painelPublicar(){
   box.append(el('div', {class:'card'},
     el('div', {class:'lbl'}, 'Cópia de segurança'),
     el('p', {class:'hint', style:'margin:0 4px 12px'}, 'Baixe um arquivo com todo o conteúdo do site, ou volte para o que está publicado agora.'),
-    el('div', {class:'row', style:'display:flex;gap:8px;flex-wrap:wrap'},
+    el('div', {style:'display:flex;gap:8px;flex-wrap:wrap'},
       el('button', {class:'b line sm', type:'button', onclick:baixar}, 'Baixar conteúdo'),
       el('button', {class:'b line sm', type:'button', onclick:carregarArquivo}, 'Carregar arquivo'),
       el('button', {class:'b danger sm', type:'button', onclick:() => { if (confirm('Descartar todas as alterações que ainda não foram publicadas?')){ S.dados = clone(S.publicado); S.temp = {}; mudou(); renderEditor(); renderSide(); } }}, 'Descartar alterações'))));
@@ -531,7 +795,6 @@ async function publicar(){
   try {
     const dados = clone(S.dados);
     const arquivos = []; const novos = {};
-    // fotos novas viram arquivos na pasta fotos/
     const varrer = async o => { for (const k in o){ const v = o[k];
       if (typeof v === 'string' && v.startsWith('data:image/')){
         const p = await nomeArquivo(v);
@@ -573,7 +836,7 @@ function baixar(){
 }
 function carregarArquivo(){
   const inp = el('input', { type:'file', accept:'.js,.json,text/javascript,application/json', onchange: async () => {
-    try { const txt = await inp.files[0].text(); S.dados = parseConteudo(txt); mudou(); renderEditor(); renderSide(); toast('Conteúdo carregado. Publique para levar ao site.'); }
+    try { const txt = await inp.files[0].text(); S.dados = completar(parseConteudo(txt)); mudou(); renderEditor(); renderSide(); toast('Conteúdo carregado. Publique para levar ao site.'); }
     catch(e){ toast('Esse arquivo não parece ser um conteúdo do site.'); }
   }}); inp.click();
 }
@@ -586,8 +849,24 @@ function post(m){ if (pronto) frame.contentWindow.postMessage(m, '*'); }
 function enviarPrevia(){
   const d = JSON.parse(JSON.stringify(S.dados), (k, v) => typeof v === 'string' && S.temp[v] ? S.temp[v] : v);
   post({ tipo:'conteudo', dados:d });
+  if (S.sel) post({ tipo:'marcar', sec:S.sel.sec, i:S.sel.i });
 }
-addEventListener('message', e => { if (e.source === frame.contentWindow && e.data && e.data.tipo === 'pronto'){ pronto = true; enviarPrevia(); } });
+const painelDoEnfeite = sec => sec === 'contagem' ? 'capa' : sec;
+addEventListener('message', e => {
+  if (e.source !== frame.contentWindow || !e.data) return;
+  const m = e.data;
+  if (m.tipo === 'pronto'){ pronto = true; enviarPrevia(); }
+  if (m.tipo === 'enfeite-movido' || m.tipo === 'enfeite-clicado'){
+    const it = (S.dados.enfeites[m.sec] || [])[m.i]; if (!it) return;
+    if (m.tipo === 'enfeite-movido'){ if (m.celular){ it.xm = m.x; it.ym = m.y; } else { it.x = m.x; it.y = m.y; } mudou(); }
+    S.sel = { sec:m.sec, i:m.i };
+    const key = `enfeites.${m.sec}:${m.i}`;
+    S.abertos.clear(); S.abertos.add(key);
+    const alvo = painelDoEnfeite(m.sec);
+    if (S.painel !== alvo) abrir(alvo, true); else renderEditor();
+    rolarPara(key);
+  }
+});
 function ajustar(){
   const W = stage.clientWidth, H = stage.clientHeight; if (!W) return;
   stage.classList.toggle('phone', dev === 'phone');
@@ -595,8 +874,8 @@ function ajustar(){
   else { const w = 390, h = Math.min(844, H - 30), k = Math.min(1, (H - 30) / h); Object.assign(frame.style, { width:w + 'px', height:h + 'px', left:Math.max(0, (W - w * k) / 2) + 'px', top:'14px', transform:`scale(${k})` }); }
 }
 new ResizeObserver(ajustar).observe(stage);
-$('#devSeg').addEventListener('click', e => { const b = e.target.closest('[data-dev]'); if (!b) return; dev = b.dataset.dev; document.querySelectorAll('#devSeg button').forEach(x => x.classList.toggle('on', x === b)); ajustar(); });
-$('#fab').addEventListener('click', () => { $('#prev').classList.add('show'); dev = innerWidth < 760 ? 'phone' : dev; document.querySelectorAll('#devSeg button').forEach(x => x.classList.toggle('on', x.dataset.dev === dev)); requestAnimationFrame(ajustar); });
+$('#devSeg').addEventListener('click', e => { const b = e.target.closest('[data-dev]'); if (!b) return; dev = b.dataset.dev; $$('#devSeg button').forEach(x => x.classList.toggle('on', x === b)); ajustar(); });
+$('#fab').addEventListener('click', () => { $('#prev').classList.add('show'); dev = innerWidth < 760 ? 'phone' : dev; $$('#devSeg button').forEach(x => x.classList.toggle('on', x.dataset.dev === dev)); requestAnimationFrame(ajustar); });
 $('#prevClose').addEventListener('click', () => $('#prev').classList.remove('show'));
 
 /* ═════════ Salvar rascunho + status ═════════ */
@@ -621,17 +900,20 @@ async function carregarPublicado(){
   throw new Error('Não encontrei o arquivo conteudo.js ao lado do painel.');
 }
 (async () => {
-  try { S.publicado = await carregarPublicado(); }
+  try { S.publicado = completar(await carregarPublicado()); }
   catch(e){ $('#editor').append(el('div', {class:'banner err'}, e.message)); status('err', 'Erro'); return; }
   S.dados = clone(S.publicado);
   const r = await idb.get('rascunho');
-  if (r && r.dados && !same(r.dados, S.publicado)){
-    if (same(r.base, S.publicado)){ S.dados = r.dados; toast('Continuando de onde você parou (rascunho salvo neste aparelho).'); }
-    else {
-      S.aviso = el('div', {class:'banner'}, el('b', {}, 'O site foi atualizado depois do seu último rascunho. '), 'Quer continuar o rascunho deste aparelho ou começar do que está no site agora?',
-        el('div', {class:'row'},
-          el('button', {class:'b navy sm', type:'button', onclick:() => { S.aviso = null; mudou(); renderEditor(); }}, 'Usar o que está no site'),
-          el('button', {class:'b line sm', type:'button', onclick:() => { S.dados = r.dados; S.aviso = null; mudou(); renderEditor(); renderSide(); }}, 'Continuar meu rascunho')));
+  if (r && r.dados){
+    completar(r.dados); completar(r.base);
+    if (!same(r.dados, S.publicado)){
+      if (same(r.base, S.publicado)){ S.dados = r.dados; toast('Continuando de onde você parou (rascunho salvo neste aparelho).'); }
+      else {
+        S.aviso = el('div', {class:'banner'}, el('b', {}, 'O site foi atualizado depois do seu último rascunho. '), 'Quer continuar o rascunho deste aparelho ou começar do que está no site agora?',
+          el('div', {class:'row'},
+            el('button', {class:'b navy sm', type:'button', onclick:() => { S.aviso = null; mudou(); renderEditor(); }}, 'Usar o que está no site'),
+            el('button', {class:'b line sm', type:'button', onclick:() => { S.dados = r.dados; S.aviso = null; mudou(); renderEditor(); renderSide(); }}, 'Continuar meu rascunho')));
+      }
     }
   }
   renderSide(); renderEditor(); mudou(); ajustar();
