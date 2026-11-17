@@ -299,6 +299,15 @@
   .gift .g-desc{font-size:13px;opacity:.85;margin-bottom:14px;flex:1;padding:0 6px}
   .gift .g-val{font-family:var(--serif);font-size:20px;margin-bottom:16px}
   .gift .btn{align-self:center;padding:13px 26px}
+  .gift.recolhido{display:none!important}
+  .mais{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:40px}
+  .mais.fechado{position:relative;z-index:1;margin-top:-120px;padding-top:120px;background:linear-gradient(to bottom,transparent,var(--sec-bg,var(--nude)) 70%);pointer-events:none}
+  .mais.fechado .btn{pointer-events:auto}
+  section.alt .mais.fechado{--sec-bg:var(--paper)}
+  .mais .btn{display:inline-flex;align-items:center;gap:12px}
+  .mais .btn svg{width:14px;height:14px;transition:transform .35s var(--ease)}
+  .mais:not(.fechado) .btn svg{transform:rotate(180deg)}
+  .mais small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray)}
   .pix-free{text-align:center;margin-top:46px;font-size:14px}
   .pix-free a{cursor:pointer;font-weight:500}
   .presentes .bg1{width:clamp(36px,3.8vw,54px);left:9%;top:110px}
@@ -634,6 +643,7 @@
         <p class="g-desc">${fmt(g.descricao)}</p>
         ${Number(g.valor) ? `<div class="g-val">${brl(g.valor)}</div>` : ''}
         <button class="btn solid" type="button" data-give="${i}">Presentear</button></article>`).join('')}</div>
+      <div class="mais" data-mais hidden></div>
       ${d.pixLivre !== false ? `<p class="pix-free reveal">Prefere escolher o valor? <a data-pix-livre>Presentear com Pix livre</a></p>` : ''}
       </div>` },
 
@@ -766,8 +776,24 @@
     const cats = ['Todos', ...new Set((C.presentes?.itens || []).map(g => g.categoria).filter(Boolean))];
     if (!cats.includes(activeCat)) activeCat = 'Todos';
     box.innerHTML = cats.length > 2 ? cats.map(c => `<button type="button" class="chip${c===activeCat?' active':''}" data-cat-btn="${esc(c)}">${esc(c)}</button>`).join('') : '';
-    $$('.gifts [data-gift]').forEach(e => { e.style.display = (activeCat === 'Todos' || e.dataset.cat === activeCat) ? '' : 'none'; });
+    // Mostra só os primeiros presentes; o resto aparece no botão "Ver todos"
+    const lim = Math.max(1, Number(C.presentes?.mostrar) || 8);
+    let n = 0;
+    $$('.gifts [data-gift]').forEach(e => {
+      const naCat = activeCat === 'Todos' || e.dataset.cat === activeCat;
+      e.style.display = naCat ? '' : 'none';
+      if (naCat) n++;
+      e.classList.toggle('recolhido', naCat && !presentesAbertos && n > lim);
+    });
+    const mais = $('[data-mais]'); if (!mais) return;
+    mais.hidden = n <= lim;
+    mais.classList.toggle('fechado', !presentesAbertos);
+    const seta = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+    mais.innerHTML = presentesAbertos
+      ? `<button class="btn" type="button" data-mais-btn>Mostrar menos ${seta}</button>`
+      : `<button class="btn solid" type="button" data-mais-btn>Ver todos os presentes ${seta}</button><small>mais ${n - lim} ${n - lim === 1 ? 'ideia' : 'ideias'}</small>`;
   }
+  let presentesAbertos = false;
 
   /* ── Pix (BR Code estático) ── */
   function emv(id, v){ return id + String(v.length).padStart(2,'0') + v; }
@@ -817,6 +843,11 @@
   document.addEventListener('click', e => {
     const chip = e.target.closest('[data-cat-btn]');
     if (chip){ activeCat = chip.dataset.catBtn; buildChips(); return; }
+    if (e.target.closest('[data-mais-btn]')){
+      presentesAbertos = !presentesAbertos; buildChips();
+      if (!presentesAbertos) scrollTo({ top: $('#presentes .gifts').getBoundingClientRect().top + scrollY - 110, behavior:'smooth' });
+      return;
+    }
     const give = e.target.closest('[data-give]');
     if (give){ openGive((C.presentes?.itens || [])[+give.dataset.give] || {}); return; }
     if (e.target.closest('[data-pix-livre]')) openGive({nome:'Presente com Pix', valor:0});

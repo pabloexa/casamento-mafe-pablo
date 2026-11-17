@@ -200,49 +200,9 @@ window.CONTEUDO = {
         "link": ""
       },
       {
-        "nome": "Passeio de barco",
-        "descricao": "Um dia inteiro de mar durante a viagem.",
-        "valor": 600,
-        "categoria": "Lua de mel",
-        "imagem": "",
-        "link": ""
-      },
-      {
-        "nome": "Uma noite no hotel",
-        "descricao": "Para estender a lua de mel por mais um dia.",
-        "valor": 900,
-        "categoria": "Lua de mel",
-        "imagem": "",
-        "link": ""
-      },
-      {
-        "nome": "Cota da lua de mel",
-        "descricao": "Qualquer ajuda já faz a viagem ficar mais bonita.",
-        "valor": 330,
-        "categoria": "Lua de mel",
-        "imagem": "",
-        "link": ""
-      },
-      {
         "nome": "Jogo de panelas",
         "descricao": "Para os primeiros jantares na casa nova.",
         "valor": 800,
-        "categoria": "Casa",
-        "imagem": "",
-        "link": ""
-      },
-      {
-        "nome": "Cafeteira espresso",
-        "descricao": "Nosso café da manhã agradece.",
-        "valor": 1200,
-        "categoria": "Casa",
-        "imagem": "",
-        "link": ""
-      },
-      {
-        "nome": "Taças de vinho",
-        "descricao": "Para brindar sempre que der vontade.",
-        "valor": 300,
         "categoria": "Casa",
         "imagem": "",
         "link": ""
@@ -256,15 +216,384 @@ window.CONTEUDO = {
         "link": ""
       },
       {
+        "nome": "Fone antirruído para a noiva",
+        "descricao": "Para ela dormir em paz durante as madrugadas de PSN do noivo.",
+        "valor": 700,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Passeio de barco",
+        "descricao": "Um dia inteiro de mar durante a viagem.",
+        "valor": 600,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Cafeteira espresso",
+        "descricao": "Nosso café da manhã agradece.",
+        "valor": 1200,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
         "nome": "Gift Card da PSN",
         "descricao": "Faça as madrugadas em fins de semana do noivo mais felizes",
         "valor": 400,
         "categoria": "Experiências",
         "imagem": "",
         "link": ""
+      },
+      {
+        "nome": "Fundo para a primeira briga",
+        "descricao": "Flores e chocolate para o pedido de desculpas (de quem errou).",
+        "valor": 150,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Uma noite no hotel",
+        "descricao": "Para estender a lua de mel por mais um dia.",
+        "valor": 900,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Taças de vinho",
+        "descricao": "Para brindar sempre que der vontade.",
+        "valor": 300,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Show a dois",
+        "descricao": "Ingressos para cantarmos alto juntos.",
+        "valor": 500,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Pizza do primeiro domingo",
+        "descricao": "Porque ninguém vai querer cozinhar depois da festa.",
+        "valor": 120,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Cota da lua de mel",
+        "descricao": "Qualquer ajuda já faz a viagem ficar mais bonita.",
+        "valor": 330,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Jogo de cama de casal",
+        "descricao": "Lençóis macios para a casa nova.",
+        "valor": 500,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Viagem de um ano de casados",
+        "descricao": "Já garantindo a comemoração do nosso primeiro aniversário.",
+        "valor": 1200,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Mala nova para a noiva",
+        "descricao": "Para caber tudo o que ela vai trazer da viagem.",
+        "valor": 700,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Passagens aéreas",
+        "descricao": "Uma cota para nos levar até o destino da lua de mel.",
+        "valor": 1000,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Air fryer",
+        "descricao": "Para os jantares rápidos depois do trabalho.",
+        "valor": 550,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Curso de vinhos a dois",
+        "descricao": "Para escolhermos melhor o vinho das taças que vocês deram.",
+        "valor": 450,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Controle extra do videogame",
+        "descricao": "Para a noiva finalmente ganhar do noivo.",
+        "valor": 450,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Massagem para o casal",
+        "descricao": "Um dia de spa para descansar depois da festa.",
+        "valor": 450,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Robô aspirador",
+        "descricao": "Menos tempo varrendo, mais tempo juntos.",
+        "valor": 1500,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Aulas de dança",
+        "descricao": "Para arrasarmos na pista no aniversário de casamento.",
+        "valor": 350,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Primeira conta de luz",
+        "descricao": "Alguém tem que pagar o ar-condicionado ligado a noite toda.",
+        "valor": 300,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Café da manhã no quarto",
+        "descricao": "Para acordar sem pressa nenhuma.",
+        "valor": 200,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Plantas para a varanda",
+        "descricao": "Para os passarinhos do nosso convite terem onde pousar.",
+        "valor": 250,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Um ano de cinema",
+        "descricao": "Sessões com pipoca garantidas por um ano inteiro.",
+        "valor": 400,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Ajuda no cartão de crédito da noiva",
+        "descricao": "O noivo agradece muito.",
+        "valor": 500,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Drinks à beira da piscina",
+        "descricao": "Uma rodada por sua conta, com brinde em sua homenagem.",
+        "valor": 150,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Lava-louças",
+        "descricao": "Para acabar de vez com a discussão de quem lava a louça.",
+        "valor": 2500,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Fim de semana na Serra da Canastra",
+        "descricao": "Cachoeiras e queijo canastra, aqui pertinho de Uberlândia.",
+        "valor": 900,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Travesseiro para o sofá",
+        "descricao": "Para o noivo, nas noites em que perder a discussão.",
+        "valor": 100,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Mergulho no mar",
+        "descricao": "Para conhecermos o fundo do mar de perto.",
+        "valor": 550,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Batedeira planetária",
+        "descricao": "Para os bolos de domingo.",
+        "valor": 900,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Jogo no estádio",
+        "descricao": "Ingressos para torcermos juntos.",
+        "valor": 300,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Campanha contra meia com chinelo",
+        "descricao": "Uma causa nobre para o estilo do noivo.",
+        "valor": 80,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Aluguel de carro",
+        "descricao": "Para explorar cada cantinho do destino.",
+        "valor": 600,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Jogo de toalhas",
+        "descricao": "Toalhas fofinhas para o banheiro novo.",
+        "valor": 250,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Voo de parapente",
+        "descricao": "Coragem a dois, lá do alto.",
+        "valor": 600,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Estoque de pão de queijo",
+        "descricao": "Mineiro que se preza não vive sem.",
+        "valor": 90,
+        "categoria": "Divertidos",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Ensaio de fotos na viagem",
+        "descricao": "Para guardar a lua de mel para sempre.",
+        "valor": 800,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Aparelho de jantar",
+        "descricao": "Para receber vocês aqui em casa.",
+        "valor": 700,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Aula de cerâmica a dois",
+        "descricao": "Para fazermos as nossas próprias canecas.",
+        "valor": 300,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Passeio de balão",
+        "descricao": "Ver o nascer do sol lá de cima.",
+        "valor": 1300,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Ajuda no sofá novo",
+        "descricao": "Onde vão acontecer todas as maratonas de séries.",
+        "valor": 1000,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Upgrade de quarto",
+        "descricao": "Para a vista ficar ainda mais bonita.",
+        "valor": 700,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Churrasqueira",
+        "descricao": "Para os churrascos com os amigos na casa nova.",
+        "valor": 600,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Sorvete todo dia da viagem",
+        "descricao": "Porque lua de mel sem sorvete não vale.",
+        "valor": 100,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Faqueiro",
+        "descricao": "Talheres bonitos para os jantares em casa.",
+        "valor": 450,
+        "categoria": "Casa",
+        "imagem": "",
+        "link": ""
+      },
+      {
+        "nome": "Seguro-viagem",
+        "descricao": "Para viajarmos tranquilos (e a mãe da noiva também).",
+        "valor": 300,
+        "categoria": "Lua de mel",
+        "imagem": "",
+        "link": ""
       }
     ],
-    "blocos": []
+    "blocos": [],
+    "mostrar": 8
   },
   "confirmar": {
     "eyebrow": "Confirme sua presença",

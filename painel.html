@@ -350,6 +350,7 @@ const PRONTAS = {
   presentes: { nome:'Presentes', intro:'A lista de presentes. Cada presente abre o QR Code do Pix com o valor já preenchido (configure a chave em “Contato e Pix”).', campos:[
     ...titulo('presentes'), A('presentes.texto','Texto'),
     { k:'presentes.pixLivre', l:'Mostrar a opção “Pix livre” (valor que a pessoa escolhe)', t:'sim' },
+    { k:'presentes.mostrar', l:'Presentes que aparecem antes do botão “Ver todos”', t:'numero', min:2, max:30, step:1, padrao:8, dica:'O resto fica escondido até o convidado tocar em “Ver todos os presentes”. Se a lista for menor que isso, o botão não aparece.' },
     { k:'presentes.itens', l:'Presentes', t:'lista', item:'presente', novo:{ nome:'Novo presente', descricao:'', valor:0, categoria:'', imagem:'', link:'' }, thumb:i => i.imagem,
       resumo:i => [i.nome, [i.categoria, Number(i.valor) ? brl(i.valor) : 'sem valor'].filter(Boolean).join(' · ')],
       campos:[ T('nome','Nome do presente'), A('descricao','Descrição', {rows:2}), { k:'valor', l:'Valor', t:'dinheiro' },
@@ -466,7 +467,7 @@ function campo(c, obj, ns){
     case 'sim': wrap.append(swField(v === undefined ? (c.padrao ?? true) : !!v, upd, c.l), dica); return wrap;
     case 'area': wrap.append(el('label', {}, c.l), el('textarea', { rows:c.rows || 3, oninput:e => upd(e.target.value) }, v ?? ''), dica); return wrap;
     case 'select': wrap.append(el('label', {}, c.l), selectEl(c.opcoes, v ?? c.opcoes[0][0], val => { upd(val); }), dica); return wrap;
-    case 'numero': wrap.append(el('label', {}, c.l), rangeEl(v ?? c.min, c, upd), dica); return wrap;
+    case 'numero': wrap.append(el('label', {}, c.l), rangeEl(v ?? c.padrao ?? c.min, c, upd), dica); return wrap;
     case 'posicao': return campoPosicao(obj, wrap);
     case 'datahora': {
       const local = String(v || '').slice(0, 16);
