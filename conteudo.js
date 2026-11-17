@@ -601,7 +601,9 @@ window.CONTEUDO = {
     "titulo": "*Esperamos* você",
     "texto": "Por favor, confirme até 30 de abril de 2027.",
     "agradecimento": "Obrigado! Recebemos sua confirmação. Até 05 de junho!",
-    "blocos": []
+    "blocos": [],
+    "perguntas": [],
+    "pedirRestricao": false
   },
   "rodape": {
     "data": "05 . 06 . 2027",
@@ -804,8 +806,8 @@ window.CONTEUDO = {
         "y": 84,
         "espelhar": false,
         "soPc": false,
-        "xm": 45,
-        "ym": 81.3
+        "xm": 45.8,
+        "ym": 80.2
       }
     ],
     "rodape": [
