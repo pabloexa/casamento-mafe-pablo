@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel do site · Mafe & Pablo</title>
+<link rel="icon" href="assets/monograma-azul.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.write('<script src="conteudo.js?v=' + Date.now() + '"><\/script>');</script>
+<style>
+  :root{
+    --nude:#ede9e2; --paper:#f7f5f1; --white:#fff; --gray:#8a919c; --navy:#1b2e49; --navy-dark:#111a2c;
+    --line:rgba(27,46,73,.13); --gold:#c48a3a; --ok:#3f7d5a; --err:#b0433a;
+    --serif:'Playfair Display', Georgia, serif; --sans:'Montserrat', system-ui, sans-serif;
+    --r:20px; --r-sm:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);font-size:14px;color:var(--navy);background:var(--nude);-webkit-font-smoothing:antialiased;overflow:hidden}
+  button{font-family:inherit;cursor:pointer}
+  input,textarea,select{font-family:inherit;font-size:14px;color:var(--navy)}
+  .app{display:grid;grid-template-rows:auto 1fr;height:100vh;height:100dvh}
+
+  /* Barra do topo */
+  .top{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--navy);color:var(--nude)}
+  .top img{width:40px;filter:brightness(0) invert(.93)}
+  .top h1{font-family:var(--serif);font-weight:400;font-size:20px;white-space:nowrap}
+  .top h1 em{opacity:.7}
+  .status{display:inline-flex;align-items:center;gap:8px;font-size:12px;padding:7px 14px;border-radius:999px;background:rgba(237,233,226,.1);white-space:nowrap}
+  .status i{width:8px;height:8px;border-radius:50%;background:#7fc79d;flex:none}
+  .status.pend i{background:#e8b04b}.status.busy i{background:#8fb3e8;animation:pulse 1s infinite}.status.err i{background:#e8776b}
+  @keyframes pulse{50%{opacity:.3}}
+  .top .sp{flex:1}
+  .b{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:600;text-decoration:none;transition:background .2s,transform .2s,opacity .2s;white-space:nowrap}
+  .b:active{transform:scale(.97)}
+  .b.pri{background:var(--nude);color:var(--navy)}.b.pri:hover{background:#fff}
+  .b.ghost{background:transparent;color:inherit;border-color:currentColor;opacity:.85}.b.ghost:hover{opacity:1}
+  .b.navy{background:var(--navy);color:var(--nude)}.b.navy:hover{background:var(--navy-dark)}
+  .b.soft{background:var(--nude);color:var(--navy)}.b.soft:hover{background:#e3ddd3}
+  .b.line{background:#fff;color:var(--navy);border-color:var(--line)}.b.line:hover{border-color:var(--navy)}
+  .b.danger{background:#fff;color:var(--err);border-color:rgba(176,67,58,.3)}
+  .b.sm{padding:7px 12px;font-size:12px}
+  .b[disabled]{opacity:.45;pointer-events:none}
+
+  /* Corpo: menu | editor | prévia */
+  .body{display:grid;grid-template-columns:220px minmax(360px,520px) 1fr;min-height:0}
+  .side{padding:18px 12px;overflow:auto;border-right:1px solid var(--line)}
+  .side h4{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray);font-weight:600;margin:14px 12px 8px}
+  .side h4:first-child{margin-top:0}
+  .side button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:999px;padding:10px 14px;font-size:13.5px;font-weight:500;color:var(--navy);margin-bottom:2px}
+  .side button:hover{background:rgba(27,46,73,.06)}
+  .side button.on{background:var(--navy);color:var(--nude)}
+  .side button .off{margin-left:auto;font-size:10px;opacity:.6;font-weight:500}
+  .side button .dot{width:7px;height:7px;border-radius:50%;background:#e8b04b;margin-left:auto}
+
+  .editor{overflow:auto;padding:26px 26px 80px;background:var(--paper);border-right:1px solid var(--line)}
+  .editor h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.1;margin-bottom:6px}
+  .editor .intro{font-size:13px;color:#5b6575;line-height:1.55;margin-bottom:22px}
+  .card{background:#fff;border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(17,26,44,.04)}
+  .f{margin-bottom:16px}.f:last-child{margin-bottom:0}
+  .f > label,.lbl{display:block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5b6575;margin:0 0 7px 4px}
+  .f input[type=text],.f input[type=url],.f input[type=tel],.f input[type=datetime-local],.f input[type=password],.f textarea,.f select{
+    width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);transition:border-color .2s,background .2s;line-height:1.5}
+  .f textarea{resize:vertical;min-height:80px}
+  .f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--navy);background:#fff}
+  .hint{font-size:12px;color:var(--gray);margin:6px 4px 0;line-height:1.5}
+  .hint b{color:#5b6575}
+  .money{position:relative}.money span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:13px}
+  .money input{padding-left:40px!important}
+
+  /* Interruptor */
+  .sw,.f > label.sw{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;font-size:14px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--navy);margin:0}
+  .sw input{display:none}
+  .sw i{width:42px;height:24px;border-radius:999px;background:#cfd3d9;position:relative;flex:none;transition:background .2s}
+  .sw i::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .sw input:checked + i{background:var(--navy)}
+  .sw input:checked + i::after{transform:translateX(18px)}
+
+  /* Imagem */
+  .img-f{display:flex;gap:14px;align-items:center}
+  .thumb{width:84px;height:84px;border-radius:16px;background:var(--nude) url(assets/toile-creme.jpg) center/300px;background-blend-mode:multiply;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb.icon img{object-fit:contain;padding:12px}
+  .img-f .acts{display:flex;flex-wrap:wrap;gap:8px}
+  .icons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .icons button{width:52px;height:52px;border-radius:14px;border:1px solid var(--line);background:var(--paper);padding:8px}
+  .icons button img{width:100%;height:100%;object-fit:contain}
+  .icons button.on{border-color:var(--navy);background:#fff;box-shadow:0 0 0 2px var(--navy) inset}
+
+  /* Listas */
+  .list{display:flex;flex-direction:column;gap:10px}
+  .it{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .it.open{border-color:rgba(27,46,73,.35);box-shadow:0 8px 24px rgba(17,26,44,.08)}
+  .it-h{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;cursor:pointer}
+  .it-h .mini{width:38px;height:38px;border-radius:10px;background:var(--nude) url(assets/toile-creme.jpg) center/160px;background-blend-mode:multiply;flex:none;overflow:hidden}
+  .it-h .mini img{width:100%;height:100%;object-fit:cover}
+  .it-h .mini.icon img{object-fit:contain;padding:5px}
+  .it-h .t{flex:1;min-width:0}
+  .it-h .t b{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it-h .t small{display:block;color:var(--gray);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it-h .ctl{display:flex;gap:2px}
+  .ic{width:32px;height:32px;border-radius:50%;border:0;background:transparent;color:var(--navy);font-size:15px;display:inline-flex;align-items:center;justify-content:center}
+  .ic:hover{background:var(--nude)}
+  .ic.del:hover{background:#f6e3e1;color:var(--err)}
+  .ic[disabled]{opacity:.25;pointer-events:none}
+  .it-b{display:none;padding:4px 16px 18px;border-top:1px solid var(--line);padding-top:16px}
+  .it.open .it-b{display:block}
+  .add{width:100%;margin-top:10px;border:1.5px dashed rgba(27,46,73,.3);background:transparent;border-radius:var(--r);padding:14px;font-weight:600;color:var(--navy);font-size:13.5px}
+  .add:hover{background:#fff;border-color:var(--navy)}
+
+  /* Ordem das seções */
+  .ord{display:flex;align-items:center;gap:10px;background:#fff;border-radius:16px;padding:8px 8px 8px 14px;margin-bottom:8px;border:1px solid var(--line)}
+  .ord .n{width:24px;height:24px;border-radius:50%;background:var(--nude);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex:none}
+  .ord input{flex:1;min-width:0;border:1px solid transparent;border-radius:10px;padding:8px 10px;background:transparent;font-weight:500}
+  .ord input:hover,.ord input:focus{border-color:var(--line);background:var(--paper);outline:none}
+  .ord.hidden{opacity:.55}
+
+  /* Prévia */
+  .prev{display:flex;flex-direction:column;min-width:0;min-height:0;background:#dcd6cc}
+  .prev-bar{display:flex;align-items:center;gap:8px;padding:10px 14px}
+  .prev-bar .lbl{margin:0;flex:1}
+  .seg{display:inline-flex;background:rgba(255,255,255,.55);border-radius:999px;padding:3px}
+  .seg button{border:0;background:transparent;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--navy)}
+  .seg button.on{background:var(--navy);color:var(--nude)}
+  .stage{flex:1;position:relative;overflow:hidden;margin:0 14px 14px;border-radius:var(--r)}
+  .stage iframe{position:absolute;top:0;left:0;border:0;background:var(--nude);transform-origin:0 0}
+  .stage.phone iframe{border-radius:28px;box-shadow:0 0 0 8px var(--navy-dark),0 20px 50px rgba(17,26,44,.3)}
+  .prev-close{display:none}
+
+  /* Avisos */
+  .banner{background:#fff6e5;border:1px solid #f0d7a6;border-radius:var(--r);padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.55}
+  .banner.ok{background:#eaf5ee;border-color:#bfdccb}
+  .banner.err{background:#fbecea;border-color:#efc4bf}
+  .banner .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy-dark);color:var(--nude);padding:13px 20px;border-radius:999px;font-size:13px;box-shadow:0 12px 40px rgba(0,0,0,.3);z-index:99;max-width:92vw;text-align:center;animation:tin .3s}
+  @keyframes tin{from{opacity:0;transform:translate(-50%,10px)}}
+  ol.steps{margin:10px 0 0 18px;line-height:1.65;font-size:13px}
+  ol.steps li{margin-bottom:6px}
+  code{background:var(--nude);padding:1px 6px;border-radius:6px;font-size:12px}
+  details summary{cursor:pointer;font-weight:600;font-size:13px;padding:4px}
+  .fab{display:none}
+
+  /* Telas menores */
+  @media (max-width:1180px){
+    .body{grid-template-columns:200px 1fr}
+    .prev{position:fixed;inset:0;z-index:50;display:none}
+    .prev.show{display:flex}
+    .prev-close{display:inline-flex}
+    .fab{display:inline-flex;position:fixed;right:18px;bottom:18px;z-index:40;box-shadow:0 10px 30px rgba(17,26,44,.3)}
+  }
+  @media (max-width:760px){
+    .top{flex-wrap:wrap;gap:10px;padding:10px 14px}
+    .top h1{font-size:17px}
+    .top .sp{display:none}
+    .top .acts{display:flex;gap:8px;width:100%}
+    .top .acts .b{flex:1}
+    .body{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+    .side{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+    .side h4{display:none}
+    .side button{width:auto;flex:none;white-space:nowrap;padding:9px 14px;background:rgba(255,255,255,.5)}
+    .side button .off,.side button .dot{display:none}
+    .editor{padding:20px 14px 100px}
+    .editor h2{font-size:26px}
+    .img-f{flex-direction:column;align-items:flex-start}
+  }
+  @media (min-width:761px){ .top .acts{display:flex;gap:8px} }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <img src="assets/monograma-azul.png" alt="">
+    <h1>Painel do site <em>· Mafe &amp; Pablo</em></h1>
+    <span class="status" id="status"><i></i><span>Carregando…</span></span>
+    <span class="sp"></span>
+    <div class="acts">
+      <a class="b ghost" href="index.html" target="_blank" rel="noopener">Ver site</a>
+      <button class="b pri" id="btnPub">Publicar no site</button>
+    </div>
+  </div>
+  <div class="body">
+    <nav class="side" id="side"></nav>
+    <main class="editor" id="editor"></main>
+    <section class="prev" id="prev">
+      <div class="prev-bar">
+        <span class="lbl">Prévia</span>
+        <div class="seg" id="devSeg"><button data-dev="pc" class="on">Computador</button><button data-dev="phone">Celular</button></div>
+        <button class="b navy sm prev-close" id="prevClose">Fechar</button>
+      </div>
+      <div class="stage" id="stage"><iframe id="frame" title="Prévia do site" src="index.html?preview=1"></iframe></div>
+    </section>
+  </div>
+</div>
+<button class="b navy fab" id="fab">Ver prévia</button>
+
+<script>
+(function(){
+'use strict';
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+function el(tag, attrs={}, ...kids){
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)){
+    if (k === 'class') e.className = v; else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  kids.flat().forEach(k => k != null && e.append(k.nodeType ? k : document.createTextNode(k)));
+  return e;
+}
+function toast(msg, ms=3200){ const t = el('div',{class:'toast'}, msg); document.body.append(t); setTimeout(() => t.remove(), ms); }
+const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+function set(o, p, v){ const ks = p.split('.'); const last = ks.pop(); const t = ks.reduce((a, k) => (a[k] ??= {}), o); t[last] = v; }
+
+/* ═════════ Estado ═════════ */
+const S = { dados:null, publicado:null, painel:'capa', abertos:new Set(), temp:{} };
+const GH = {
+  get token(){ try { return localStorage.getItem('mp-gh-token') || ''; } catch(e){ return ''; } },
+  set token(v){ try { v ? localStorage.setItem('mp-gh-token', v) : localStorage.removeItem('mp-gh-token'); } catch(e){} },
+  get repo(){ try { return JSON.parse(localStorage.getItem('mp-gh-repo')) || {}; } catch(e){ return {}; } },
+  set repo(v){ try { localStorage.setItem('mp-gh-repo', JSON.stringify(v)); } catch(e){} },
+};
+const REPO = () => Object.assign({ dono:'pabloexa', nome:'casamento-mafe-pablo', ramo:'main' }, GH.repo);
+
+/* Rascunho guardado no aparelho (IndexedDB aguenta fotos) */
+const idb = (() => {
+  let db;
+  const open = () => db || (db = new Promise((res, rej) => { const r = indexedDB.open('mp-painel', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
+  const tx = (mode, fn) => open().then(d => new Promise((res, rej) => { const t = d.transaction('kv', mode); const q = fn(t.objectStore('kv')); t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); }));
+  return { get: k => tx('readonly', s => s.get(k)).catch(() => null), set: (k, v) => tx('readwrite', s => s.put(v, k)).catch(() => null), del: k => tx('readwrite', s => s.delete(k)).catch(() => null) };
+})();
+
+/* ═════════ Campos ═════════ */
+const ICONES = ['beija-flor-1-azul','beija-flor-2-azul','andorinha-azul','arvore-azul','monograma-azul'].map(n => `assets/${n}.png`);
+const T = (k, l, x={}) => ({ k, l, ...x });
+const A = (k, l, x={}) => ({ k, l, t:'area', ...x });
+const titulo = id => [T(`${id}.eyebrow`, 'Frase pequena acima do título'), T(`${id}.titulo`, 'Título', {dica:'Coloque entre *asteriscos* a parte que deve ficar em itálico.'})];
+
+const PAINEIS = [
+  { id:'capa', nome:'Capa e contagem', grupo:'Página', intro:'O topo do site: a primeira coisa que os convidados veem.', campos:[
+    T('capa.kicker','Frase de cima'),
+    T('capa.noiva','Primeiro nome', {dica:'Os nomes aparecem na capa, no convite e no rodapé.'}),
+    T('capa.noivo','Segundo nome'),
+    T('capa.data','Data em destaque'),
+    T('capa.local','Local'),
+    { k:'contagem.visivel', l:'Mostrar a contagem regressiva', t:'sim' },
+    T('contagem.titulo','Texto ao lado da contagem'),
+    { k:'config.dataEvento', l:'Dia e hora do casamento', t:'datahora', dica:'Usado na contagem regressiva.' },
+  ]},
+  { id:'convite', nome:'Convite', grupo:'Seções', secao:true, intro:'O convite que aparece ao lado do envelope.', campos:[
+    ...titulo('convite'), T('convite.linha1','Linha antes dos pais'), A('convite.pais','Nomes dos pais'),
+    T('convite.linha2','Linha depois dos pais'), T('convite.data','Data por extenso'), T('convite.hora','Horário'),
+    T('convite.local','Local'), A('convite.endereco','Endereço') ]},
+  { id:'nos', nome:'Nós (fotos)', grupo:'Seções', secao:true, intro:'Galeria de fotos de vocês. A seção só aparece no site quando tiver pelo menos uma foto.', campos:[
+    ...titulo('nos'), A('nos.texto','Texto'),
+    { k:'nos.fotos', l:'Fotos', t:'lista', item:'foto', novo:{ imagem:'', legenda:'' }, resumo:i => [i.legenda || 'Foto sem legenda', i.imagem ? '' : 'sem foto ainda'], img:'imagem',
+      campos:[ { k:'imagem', l:'Foto', t:'imagem', max:1600 }, T('legenda','Legenda') ] } ]},
+  { id:'local', nome:'Local', grupo:'Seções', secao:true, intro:'Onde vai ser: texto, endereço, mapa e botões de rota.', campos:[
+    ...titulo('local'), A('local.texto','Texto', {dica:'Deixe uma linha em branco para separar os parágrafos.', rows:6}), A('local.endereco','Endereço'),
+    T('config.mapaBusca','O que procurar no mapa', {dica:'O mapa do site mostra o resultado dessa busca no Google Maps.'}),
+    T('local.linkMaps','Link do botão Google Maps', {t:'url'}), T('local.linkWaze','Link do botão Waze', {t:'url'}) ]},
+  { id:'programacao', nome:'Programação', grupo:'Seções', secao:true, intro:'Os momentos do dia, em ordem.', campos:[
+    ...titulo('programacao'),
+    { k:'programacao.itens', l:'Momentos', t:'lista', item:'momento', novo:{ hora:'', titulo:'Novo momento', texto:'' }, resumo:i => [`${i.hora ? i.hora + ' · ' : ''}${i.titulo || ''}`, i.texto],
+      campos:[ T('hora','Horário'), T('titulo','Nome'), A('texto','Descrição', {rows:2}) ] } ]},
+  { id:'menu', nome:'Menu', grupo:'Seções', secao:true, intro:'O cardápio do jantar.', campos:[
+    ...titulo('menu'), T('menu.cartaoTitulo','Título do cartão'), T('menu.cartaoSub','Linha abaixo do título'), T('menu.cartaoData','Data no cartão'),
+    { k:'menu.pratos', l:'Pratos', t:'lista', item:'prato', novo:{ titulo:'Novo prato', texto:'' }, resumo:i => [i.titulo, i.texto],
+      campos:[ T('titulo','Nome'), A('texto','Descrição', {rows:3}) ] } ]},
+  { id:'detalhes', nome:'Detalhes', grupo:'Seções', secao:true, intro:'Informações úteis para os convidados: traje, horário, hospedagem…', campos:[
+    ...titulo('detalhes'),
+    { k:'detalhes.itens', l:'Cartões', t:'lista', item:'cartão', novo:{ icone:ICONES[0], titulo:'Novo cartão', texto:'' }, resumo:i => [i.titulo, i.texto], img:'icone', icon:true,
+      campos:[ { k:'icone', l:'Desenho', t:'icone' }, T('titulo','Título'), A('texto','Texto', {rows:3}) ] } ]},
+  { id:'presentes', nome:'Presentes', grupo:'Seções', secao:true, intro:'A lista de presentes. Cada presente abre o QR Code do Pix com o valor já preenchido (configure a chave em “Contato e Pix”).', campos:[
+    ...titulo('presentes'), A('presentes.texto','Texto'),
+    { k:'presentes.pixLivre', l:'Mostrar a opção “Pix livre” (valor que a pessoa escolhe)', t:'sim' },
+    { k:'presentes.itens', l:'Presentes', t:'lista', item:'presente', novo:{ nome:'Novo presente', descricao:'', valor:0, categoria:'', imagem:'', link:'' }, img:'imagem',
+      resumo:i => [i.nome, [i.categoria, Number(i.valor) ? Number(i.valor).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'sem valor'].filter(Boolean).join(' · ')],
+      campos:[ T('nome','Nome do presente'), A('descricao','Descrição', {rows:2}), { k:'valor', l:'Valor', t:'dinheiro' },
+        { k:'categoria', l:'Categoria', t:'categoria', dica:'Os presentes são agrupados por categoria (ex.: Casa, Lua de mel).' },
+        { k:'imagem', l:'Imagem (opcional)', t:'imagem', max:900 },
+        T('link','Link de uma loja (opcional)', {t:'url', dica:'Se preencher, aparece o botão “Ver na loja”.'}) ] } ]},
+  { id:'confirmar', nome:'Confirmação', grupo:'Seções', secao:true, intro:'O formulário de confirmação de presença. As respostas chegam no WhatsApp configurado em “Contato e Pix”.', campos:[
+    ...titulo('confirmar'), A('confirmar.texto','Texto', {rows:2}), A('confirmar.agradecimento','Mensagem depois de enviar', {rows:2}) ]},
+  { id:'rodape', nome:'Rodapé', grupo:'Página', intro:'O final da página.', campos:[ T('rodape.data','Data'), T('rodape.local','Local'), T('rodape.credito','Crédito') ]},
+  { id:'ordem', nome:'Ordem das seções', grupo:'Ajustes', intro:'Mude a ordem, esconda seções e escolha o nome de cada uma no menu do topo.', custom:() => painelOrdem() },
+  { id:'contato', nome:'Contato e Pix', grupo:'Ajustes', intro:'Para onde vão as confirmações e para quem vai o Pix dos presentes.', campos:[
+    T('config.whatsapp','WhatsApp que recebe as confirmações', {t:'tel', dica:'Com DDD, ex.: <b>34 99999-8888</b>.'}),
+    T('config.pixChave','Chave Pix', {dica:'CPF, e-mail, chave aleatória ou celular. Se for celular, escreva com +55, ex.: <b>+5534999998888</b>.'}),
+    T('config.pixNome','Nome de quem recebe o Pix'),
+    T('config.pixCidade','Cidade de quem recebe o Pix') ]},
+  { id:'publicar', nome:'Publicação', grupo:'Ajustes', intro:'Ligue o painel ao site uma vez e depois é só clicar em “Publicar no site”.', custom:() => painelPublicar() },
+];
+const secMeta = id => (S.dados.secoes || []).find(s => s.id === id);
+
+/* ═════════ Menu lateral ═════════ */
+function renderSide(){
+  const side = $('#side'); side.innerHTML = ''; let g = '';
+  PAINEIS.forEach(p => {
+    if (p.grupo !== g){ g = p.grupo; side.append(el('h4', {}, g)); }
+    const m = p.secao && secMeta(p.id);
+    const pend = p.id === 'publicar' && !GH.token;
+    side.append(el('button', { class: S.painel === p.id ? 'on' : '', onclick:() => abrir(p.id) }, p.nome,
+      m && m.visivel === false ? el('span', {class:'off'}, 'oculta') : null, pend ? el('span', {class:'dot', title:'Falta ligar ao GitHub'}) : null));
+  });
+}
+function abrir(id){
+  S.painel = id; renderSide(); renderEditor(); $('#editor').scrollTop = 0;
+  const p = PAINEIS.find(x => x.id === id);
+  if (p.secao || id === 'capa' || id === 'rodape') post({ tipo:'ir', id: id === 'capa' ? 'capa' : id });
+}
+
+/* ═════════ Editor ═════════ */
+function renderEditor(){
+  const p = PAINEIS.find(x => x.id === S.painel);
+  const ed = $('#editor'); const top = ed.scrollTop; ed.innerHTML = '';
+  ed.append(el('h2', {}, p.nome), el('p', {class:'intro'}, p.intro || ''));
+  if (S.aviso) ed.append(S.aviso);
+  if (p.secao){
+    const m = secMeta(p.id);
+    if (m) ed.append(el('div', {class:'card'},
+      swField(m.visivel !== false, v => { m.visivel = v; mudou(); renderSide(); }, 'Mostrar esta seção no site'),
+      el('div', {class:'f', style:'margin-top:16px'}, el('label', {}, 'Nome no menu do topo'), inputText(m.menu, v => { m.menu = v; mudou(); }))));
+  }
+  if (p.custom) ed.append(p.custom());
+  else {
+    const card = el('div', {class:'card'});
+    p.campos.forEach(c => { if (c.t === 'lista') ed.append(campo(c, S.dados)); else card.append(campo(c, S.dados)); });
+    if (card.childNodes.length) ed.insertBefore(card, ed.querySelector('.f.lista') || null);
+  }
+  ed.scrollTop = top;
+}
+
+function inputText(v, on, type='text', extra={}){
+  return el('input', { type, value: v ?? '', oninput: e => on(e.target.value), ...extra });
+}
+function swField(v, on, label){
+  const inp = el('input', { type:'checkbox', onchange: e => on(e.target.checked) }); inp.checked = !!v;
+  return el('label', {class:'sw'}, inp, el('i'), label);
+}
+function campo(c, obj){
+  const v = get(obj, c.k);
+  const upd = val => { set(obj, c.k, val); mudou(); };
+  const wrap = el('div', {class:'f' + (c.t === 'lista' ? ' lista' : '')});
+  const dica = c.dica ? el('p', {class:'hint', html:c.dica}) : '';
+  switch (c.t){
+    case 'sim': wrap.append(swField(v !== false, upd, c.l), dica); return wrap;
+    case 'area': wrap.append(el('label', {}, c.l), el('textarea', { rows:c.rows || 3, oninput:e => upd(e.target.value) }, v ?? ''), dica); return wrap;
+    case 'datahora': {
+      const local = String(v || '').slice(0, 16);
+      wrap.append(el('label', {}, c.l), inputText(local, x => upd(x ? x + ':00-03:00' : ''), 'datetime-local'), dica); return wrap; }
+    case 'dinheiro': {
+      const fmtv = n => Number(n) ? Number(n).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '';
+      const inp = inputText(fmtv(v), x => upd(parseMoney(x)), 'text', { inputmode:'decimal', placeholder:'0,00' });
+      inp.addEventListener('blur', () => inp.value = fmtv(get(obj, c.k)));
+      wrap.append(el('label', {}, c.l), el('div', {class:'money'}, el('span', {}, 'R$'), inp), dica); return wrap; }
+    case 'categoria': {
+      const cats = [...new Set((S.dados.presentes?.itens || []).map(g => g.categoria).filter(Boolean))];
+      const id = 'dl' + Math.random().toString(36).slice(2);
+      wrap.append(el('label', {}, c.l), inputText(v, upd, 'text', { list:id }), el('datalist', {id}, ...cats.map(x => el('option', {value:x}))), dica); return wrap; }
+    case 'imagem': case 'icone': return campoImagem(c, obj, wrap, dica);
+    case 'lista': return campoLista(c, obj, wrap);
+    default: wrap.append(el('label', {}, c.l), inputText(v, upd, c.t || 'text'), dica); return wrap;
+  }
+}
+function parseMoney(x){
+  let s = String(x).replace(/[^\d.,]/g, '');
+  if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+  else if (/\.\d{3}$/.test(s)) s = s.replace(/\./g, '');
+  const n = parseFloat(s); return isNaN(n) ? 0 : Math.round(n * 100) / 100;
+}
+const showSrc = s => S.temp[s] || s;
+
+function campoImagem(c, obj, wrap, dica){
+  const v = get(obj, c.k) || '';
+  const isIcon = c.t === 'icone';
+  const thumb = el('div', {class:'thumb' + (isIcon ? ' icon' : '')}, v ? el('img', {src:showSrc(v), alt:''}) : null);
+  const file = el('input', { type:'file', accept:'image/*', style:'display:none', onchange: async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { const url = await reduzir(f, c.max || (isIcon ? 400 : 1600), isIcon); set(obj, c.k, url); mudou(); renderEditor(); }
+    catch(err){ toast('Não consegui abrir essa imagem. Tente outra (JPG ou PNG).'); }
+  }});
+  const acts = el('div', {class:'acts'},
+    el('button', {class:'b soft sm', type:'button', onclick:() => file.click()}, v ? 'Trocar imagem' : 'Escolher imagem'),
+    v ? el('button', {class:'b line sm', type:'button', onclick:() => { set(obj, c.k, ''); mudou(); renderEditor(); }}, 'Remover') : null, file);
+  wrap.append(el('label', {}, c.l), el('div', {class:'img-f'}, thumb, acts));
+  if (isIcon) wrap.append(el('div', {class:'icons'}, ...ICONES.map(src => el('button', { type:'button', class: v === src ? 'on' : '', title:'Usar este desenho', onclick:() => { set(obj, c.k, src); mudou(); renderEditor(); } }, el('img', {src, alt:''})))));
+  if (dica) wrap.append(dica);
+  return wrap;
+}
+function reduzir(file, max, keepPng){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onerror = rej;
+    r.onload = () => { const img = new Image(); img.onerror = rej; img.onload = () => {
+      const k = Math.min(1, max / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas'); cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      res(keepPng || file.type === 'image/png' && max <= 400 ? cv.toDataURL('image/png') : cv.toDataURL('image/jpeg', .85));
+    }; img.src = r.result; };
+    r.readAsDataURL(file);
+  });
+}
+
+function campoLista(c, obj, wrap){
+  const arr = get(obj, c.k) || (set(obj, c.k, []), get(obj, c.k));
+  wrap.append(el('div', {class:'lbl'}, `${c.l} (${arr.length})`));
+  const list = el('div', {class:'list'});
+  arr.forEach((it, i) => {
+    const key = c.k + ':' + i;
+    const open = S.abertos.has(key);
+    const [t1, t2] = c.resumo(it);
+    const src = c.img && it[c.img];
+    const move = (d, ev) => { ev.stopPropagation(); const j = i + d; [arr[i], arr[j]] = [arr[j], arr[i]]; S.abertos.clear(); mudou(); renderEditor(); };
+    const body = el('div', {class:'it-b'});
+    if (open) c.campos.forEach(f => body.append(campo(f, it)));
+    list.append(el('div', {class:'it' + (open ? ' open' : '')},
+      el('div', {class:'it-h', onclick:() => { open ? S.abertos.delete(key) : S.abertos.add(key); renderEditor(); }},
+        c.img ? el('div', {class:'mini' + (c.icon ? ' icon' : '')}, src ? el('img', {src:showSrc(src), alt:''}) : null) : null,
+        el('div', {class:'t'}, el('b', {}, t1 || `(${c.item} sem nome)`), t2 ? el('small', {}, t2) : null),
+        el('div', {class:'ctl'},
+          el('button', {class:'ic', title:'Subir', type:'button', disabled: i === 0, onclick:e => move(-1, e)}, '↑'),
+          el('button', {class:'ic', title:'Descer', type:'button', disabled: i === arr.length - 1, onclick:e => move(1, e)}, '↓'),
+          el('button', {class:'ic', title:'Duplicar', type:'button', onclick:e => { e.stopPropagation(); arr.splice(i + 1, 0, clone(it)); S.abertos.clear(); S.abertos.add(c.k + ':' + (i + 1)); mudou(); renderEditor(); }}, '⧉'),
+          el('button', {class:'ic del', title:'Apagar', type:'button', onclick:e => { e.stopPropagation(); if (!confirm(`Apagar “${t1 || c.item}”?`)) return; arr.splice(i, 1); S.abertos.clear(); mudou(); renderEditor(); }}, '✕'))),
+      body));
+  });
+  wrap.append(list, el('button', {class:'add', type:'button', onclick:() => { arr.push(clone(c.novo)); S.abertos.clear(); S.abertos.add(c.k + ':' + (arr.length - 1)); mudou(); renderEditor(); setTimeout(() => { const ed = $('#editor'); ed.scrollTop = ed.scrollHeight; }, 0); }}, `+ Adicionar ${c.item}`));
+  // Atualiza o resumo do item aberto enquanto digita
+  wrap.addEventListener('input', () => { clearTimeout(wrap._t); wrap._t = setTimeout(() => {
+    wrap.querySelectorAll(':scope > .list > .it').forEach((n, i) => { const [a, b] = c.resumo(arr[i] || {}); n.querySelector('.t b').textContent = a || `(${c.item} sem nome)`; const s = n.querySelector('.t small'); if (s) s.textContent = b || ''; });
+  }, 300); });
+  return wrap;
+}
+
+function painelOrdem(){
+  const box = el('div');
+  const arr = S.dados.secoes;
+  const nomes = Object.fromEntries(PAINEIS.map(p => [p.id, p.nome]));
+  arr.forEach((s, i) => {
+    const mv = d => { const j = i + d; [arr[i], arr[j]] = [arr[j], arr[i]]; mudou(); renderEditor(); };
+    const sw = el('input', {type:'checkbox', onchange:e => { s.visivel = e.target.checked; mudou(); renderEditor(); renderSide(); }}); sw.checked = s.visivel !== false;
+    box.append(el('div', {class:'ord' + (s.visivel === false ? ' hidden' : '')},
+      el('span', {class:'n'}, i + 1),
+      inputText(s.menu, v => { s.menu = v; mudou(); }, 'text', {title:`Nome no menu (${nomes[s.id] || s.id})`}),
+      el('label', {class:'sw', title:'Mostrar no site'}, sw, el('i')),
+      el('button', {class:'ic', type:'button', title:'Subir', disabled:i === 0, onclick:() => mv(-1)}, '↑'),
+      el('button', {class:'ic', type:'button', title:'Descer', disabled:i === arr.length - 1, onclick:() => mv(1)}, '↓')));
+  });
+  box.append(el('p', {class:'hint'}, 'A capa e a contagem ficam sempre no topo, e o rodapé sempre no fim.'));
+  return box;
+}
+
+/* ═════════ Publicação (GitHub) ═════════ */
+function painelPublicar(){
+  const box = el('div'); const R = REPO();
+  if (GH.token){
+    box.append(el('div', {class:'banner ok'}, el('b', {}, 'Painel ligado ao site. '), `Quando clicar em “Publicar no site”, as mudanças vão para github.com/${R.dono}/${R.nome} e o site se atualiza em 1 a 2 minutos.`,
+      el('div', {class:'row'}, el('button', {class:'b line sm', type:'button', onclick:() => { if (confirm('Desligar este aparelho do site? Você vai precisar colar o código de acesso de novo para publicar.')){ GH.token = ''; renderEditor(); renderSide(); } }}, 'Desligar este aparelho'))));
+  } else {
+    const tok = el('input', {type:'password', placeholder:'github_pat_…', autocomplete:'off'});
+    const msg = el('p', {class:'hint'});
+    box.append(el('div', {class:'card'},
+      el('p', {style:'font-size:13.5px;line-height:1.6;margin-bottom:6px'}, 'Para o painel conseguir publicar, crie uma vez um código de acesso no GitHub (é de graça e leva 2 minutos):'),
+      el('ol', {class:'steps', html:`
+        <li>Entre no GitHub com a conta <b>${esc(R.dono)}</b> e abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+        <li>Em <b>Token name</b> escreva <code>painel do casamento</code>. Em <b>Expiration</b> escolha uma data depois do casamento.</li>
+        <li>Em <b>Repository access</b> marque <b>Only select repositories</b> e escolha <code>${esc(R.nome)}</code>.</li>
+        <li>Em <b>Permissions › Repository permissions</b>, procure <b>Contents</b> e mude para <b>Read and write</b>.</li>
+        <li>Clique em <b>Generate token</b>, copie o código que começa com <code>github_pat_</code> e cole aqui embaixo.</li>`}),
+      el('div', {class:'f', style:'margin-top:16px'}, el('label', {}, 'Código de acesso'), tok,
+        el('p', {class:'hint'}, 'Fica guardado só neste navegador. Em outro celular ou computador, cole de novo.')),
+      el('button', {class:'b navy', type:'button', onclick: async e => {
+        const t = tok.value.trim(); if (!t) return;
+        e.target.disabled = true; msg.textContent = 'Testando…';
+        try {
+          const info = await gh('', {}, t);
+          if (info.permissions && !info.permissions.push) throw new Error('Esse código não tem permissão de escrita (Contents: Read and write).');
+          const u = await ghRaw('https://api.github.com/user', {}, t).catch(() => null);
+          GH.token = t; GH.repo = Object.assign(GH.repo, u ? { autor:u.login, autorId:u.id } : {});
+          toast('Pronto! Painel ligado ao site.'); renderEditor(); renderSide();
+        } catch(err){ msg.textContent = 'Não funcionou: ' + err.message; e.target.disabled = false; }
+      }}, 'Ligar ao site'), msg));
+  }
+  box.append(el('div', {class:'card'},
+    el('div', {class:'lbl'}, 'Cópia de segurança'),
+    el('p', {class:'hint', style:'margin:0 4px 12px'}, 'Baixe um arquivo com todo o conteúdo do site, ou volte para o que está publicado agora.'),
+    el('div', {class:'row', style:'display:flex;gap:8px;flex-wrap:wrap'},
+      el('button', {class:'b line sm', type:'button', onclick:baixar}, 'Baixar conteúdo'),
+      el('button', {class:'b line sm', type:'button', onclick:carregarArquivo}, 'Carregar arquivo'),
+      el('button', {class:'b danger sm', type:'button', onclick:() => { if (confirm('Descartar todas as alterações que ainda não foram publicadas?')){ S.dados = clone(S.publicado); S.temp = {}; mudou(); renderEditor(); renderSide(); } }}, 'Descartar alterações'))));
+  const R2 = REPO();
+  const f = k => inputText(R2[k], v => { GH.repo = Object.assign(GH.repo, {[k]:v}); });
+  box.append(el('details', {class:'card'}, el('summary', {}, 'Avançado'),
+    el('div', {class:'f', style:'margin-top:12px'}, el('label', {}, 'Conta do GitHub'), f('dono')),
+    el('div', {class:'f'}, el('label', {}, 'Repositório'), f('nome')),
+    el('div', {class:'f'}, el('label', {}, 'Ramo'), f('ramo'))));
+  return box;
+}
+
+async function ghRaw(url, opts={}, token=GH.token){
+  const r = await fetch(url, { method: opts.method || 'GET', headers: Object.assign({ Authorization:'Bearer ' + token, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }, opts.body ? {'Content-Type':'application/json'} : {}, opts.headers || {}), body: opts.body ? JSON.stringify(opts.body) : undefined, cache:'no-store' });
+  if (!r.ok){
+    let m = ''; try { m = (await r.json()).message; } catch(e){}
+    if (r.status === 401) throw new Error('código de acesso inválido ou vencido.');
+    if (r.status === 403) throw new Error('o código não tem permissão para este repositório (confira “Contents: Read and write”).');
+    if (r.status === 404) throw new Error('repositório não encontrado (confira se escolheu o repositório certo no código).');
+    throw new Error(m || ('erro ' + r.status));
+  }
+  return (opts.headers && /raw/.test(opts.headers.Accept)) ? r.text() : r.json();
+}
+const gh = (path, opts={}, token) => { const R = REPO(); return ghRaw(`https://api.github.com/repos/${R.dono}/${R.nome}${path}`, opts, token); };
+
+const b64 = s => btoa(unescape(encodeURIComponent(s)));
+async function nomeArquivo(dataUrl){
+  const ext = dataUrl.startsWith('data:image/png') ? 'png' : 'jpg';
+  try { const h = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(dataUrl)); return 'fotos/' + [...new Uint8Array(h)].slice(0, 8).map(x => x.toString(16).padStart(2, '0')).join('') + '.' + ext; }
+  catch(e){ return 'fotos/' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7) + '.' + ext; }
+}
+const arquivoJs = d => 'window.CONTEUDO = ' + JSON.stringify(d, null, 2) + ';\n';
+
+async function publicar(){
+  if (!GH.token){ abrir('publicar'); toast('Primeiro ligue o painel ao site (passo único).'); return; }
+  if (same(S.dados, S.publicado)){ toast('Nada novo para publicar.'); return; }
+  const btn = $('#btnPub'); btn.disabled = true; status('busy', 'Publicando…');
+  try {
+    const dados = clone(S.dados);
+    const arquivos = []; const novos = {};
+    // fotos novas viram arquivos na pasta fotos/
+    const varrer = async o => { for (const k in o){ const v = o[k];
+      if (typeof v === 'string' && v.startsWith('data:image/')){
+        const p = await nomeArquivo(v);
+        if (!novos[p]){ novos[p] = v; arquivos.push({ path:p, content:v.split(',')[1] }); }
+        o[k] = p;
+      } else if (v && typeof v === 'object') await varrer(v); } };
+    await varrer(dados);
+    arquivos.push({ path:'conteudo.js', content:b64(arquivoJs(dados)) });
+    const R = REPO();
+    for (let tentativa = 0; tentativa < 3; tentativa++){
+      try {
+        const ref = await gh(`/git/ref/heads/${R.ramo}`);
+        const base = ref.object.sha;
+        const baseCommit = await gh(`/git/commits/${base}`);
+        const tree = [];
+        for (const f of arquivos){ const blob = await gh('/git/blobs', { method:'POST', body:{ content:f.content, encoding:'base64' } }); tree.push({ path:f.path, mode:'100644', type:'blob', sha:blob.sha }); }
+        const t = await gh('/git/trees', { method:'POST', body:{ base_tree:baseCommit.tree.sha, tree } });
+        const autor = R.autor ? { name:R.autor, email:`${R.autorId}+${R.autor}@users.noreply.github.com` } : undefined;
+        const c = await gh('/git/commits', { method:'POST', body:Object.assign({ message:'Atualiza o site pelo painel', tree:t.sha, parents:[base] }, autor ? { author:autor } : {}) });
+        await gh(`/git/refs/heads/${R.ramo}`, { method:'PATCH', body:{ sha:c.sha } });
+        break;
+      } catch(err){ if (tentativa === 2 || !/fast forward|Update is not a fast/i.test(err.message)) throw err; }
+    }
+    Object.assign(S.temp, novos);
+    S.dados = dados; S.publicado = clone(dados);
+    await idb.del('rascunho');
+    mudou(true); renderEditor();
+    status('ok', 'Publicado');
+    toast('Publicado! O site se atualiza em 1 a 2 minutos.', 6000);
+  } catch(err){
+    status('err', 'Erro ao publicar');
+    toast('Não consegui publicar: ' + err.message, 8000);
+  } finally { btn.disabled = false; }
+}
+
+function baixar(){
+  const a = el('a', { href: URL.createObjectURL(new Blob([arquivoJs(S.dados)], {type:'text/javascript'})), download:'conteudo.js' });
+  document.body.append(a); a.click(); a.remove();
+}
+function carregarArquivo(){
+  const inp = el('input', { type:'file', accept:'.js,.json,text/javascript,application/json', onchange: async () => {
+    try { const txt = await inp.files[0].text(); S.dados = parseConteudo(txt); mudou(); renderEditor(); renderSide(); toast('Conteúdo carregado. Publique para levar ao site.'); }
+    catch(e){ toast('Esse arquivo não parece ser um conteúdo do site.'); }
+  }}); inp.click();
+}
+const parseConteudo = txt => JSON.parse(txt.replace(/^[\s\S]*?=\s*/, '').replace(/;\s*$/, '').trim());
+
+/* ═════════ Prévia ═════════ */
+const frame = $('#frame'), stage = $('#stage');
+let pronto = false, dev = 'pc';
+function post(m){ if (pronto) frame.contentWindow.postMessage(m, '*'); }
+function enviarPrevia(){
+  const d = JSON.parse(JSON.stringify(S.dados), (k, v) => typeof v === 'string' && S.temp[v] ? S.temp[v] : v);
+  post({ tipo:'conteudo', dados:d });
+}
+addEventListener('message', e => { if (e.source === frame.contentWindow && e.data && e.data.tipo === 'pronto'){ pronto = true; enviarPrevia(); } });
+function ajustar(){
+  const W = stage.clientWidth, H = stage.clientHeight; if (!W) return;
+  stage.classList.toggle('phone', dev === 'phone');
+  if (dev === 'pc'){ const w = 1280, k = W / w; Object.assign(frame.style, { width:w + 'px', height:(H / k) + 'px', left:'0px', top:'0px', transform:`scale(${k})` }); }
+  else { const w = 390, h = Math.min(844, H - 30), k = Math.min(1, (H - 30) / h); Object.assign(frame.style, { width:w + 'px', height:h + 'px', left:Math.max(0, (W - w * k) / 2) + 'px', top:'14px', transform:`scale(${k})` }); }
+}
+new ResizeObserver(ajustar).observe(stage);
+$('#devSeg').addEventListener('click', e => { const b = e.target.closest('[data-dev]'); if (!b) return; dev = b.dataset.dev; document.querySelectorAll('#devSeg button').forEach(x => x.classList.toggle('on', x === b)); ajustar(); });
+$('#fab').addEventListener('click', () => { $('#prev').classList.add('show'); dev = innerWidth < 760 ? 'phone' : dev; document.querySelectorAll('#devSeg button').forEach(x => x.classList.toggle('on', x.dataset.dev === dev)); requestAnimationFrame(ajustar); });
+$('#prevClose').addEventListener('click', () => $('#prev').classList.remove('show'));
+
+/* ═════════ Salvar rascunho + status ═════════ */
+let tPrev, tSave;
+function status(kind, txt){ const s = $('#status'); s.className = 'status ' + (kind === 'ok' ? '' : kind); s.querySelector('span').textContent = txt; }
+function mudou(silencioso){
+  const pend = !same(S.dados, S.publicado);
+  if (!silencioso) status(pend ? 'pend' : 'ok', pend ? 'Alterações ainda não publicadas' : 'Tudo publicado');
+  clearTimeout(tPrev); tPrev = setTimeout(enviarPrevia, 250);
+  clearTimeout(tSave); tSave = setTimeout(() => { pend ? idb.set('rascunho', { dados:S.dados, base:S.publicado, quando:Date.now() }) : idb.del('rascunho'); }, 600);
+}
+$('#btnPub').addEventListener('click', publicar);
+
+/* ═════════ Início ═════════ */
+async function carregarPublicado(){
+  if (GH.token){
+    try { const R = REPO(); return parseConteudo(await gh(`/contents/conteudo.js?ref=${encodeURIComponent(R.ramo)}`, { headers:{ Accept:'application/vnd.github.raw+json' } })); }
+    catch(e){ console.warn(e); }
+  }
+  if (window.CONTEUDO) return clone(window.CONTEUDO);
+  try { return parseConteudo(await (await fetch('conteudo.js?v=' + Date.now(), {cache:'no-store'})).text()); } catch(e){}
+  throw new Error('Não encontrei o arquivo conteudo.js ao lado do painel.');
+}
+(async () => {
+  try { S.publicado = await carregarPublicado(); }
+  catch(e){ $('#editor').append(el('div', {class:'banner err'}, e.message)); status('err', 'Erro'); return; }
+  S.dados = clone(S.publicado);
+  const r = await idb.get('rascunho');
+  if (r && r.dados && !same(r.dados, S.publicado)){
+    if (same(r.base, S.publicado)){ S.dados = r.dados; toast('Continuando de onde você parou (rascunho salvo neste aparelho).'); }
+    else {
+      S.aviso = el('div', {class:'banner'}, el('b', {}, 'O site foi atualizado depois do seu último rascunho. '), 'Quer continuar o rascunho deste aparelho ou começar do que está no site agora?',
+        el('div', {class:'row'},
+          el('button', {class:'b navy sm', type:'button', onclick:() => { S.aviso = null; mudou(); renderEditor(); }}, 'Usar o que está no site'),
+          el('button', {class:'b line sm', type:'button', onclick:() => { S.dados = r.dados; S.aviso = null; mudou(); renderEditor(); renderSide(); }}, 'Continuar meu rascunho')));
+    }
+  }
+  renderSide(); renderEditor(); mudou(); ajustar();
+})();
+})();
+</script>
+</body>
+</html>
