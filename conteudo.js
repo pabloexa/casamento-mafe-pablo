@@ -24,6 +24,12 @@ window.CONTEUDO = {
       "visivel": true
     },
     {
+      "id": "smwl2yk6v",
+      "menu": "Hospedagem",
+      "visivel": true,
+      "tipo": "livre"
+    },
+    {
       "id": "programacao",
       "menu": "Programação",
       "visivel": true
@@ -492,6 +498,43 @@ window.CONTEUDO = {
         "y": 72.2,
         "xm": 72.9,
         "ym": 75.2
+      }
+    ],
+    "smwl2yk6v": []
+  },
+  "smwl2yk6v": {
+    "fundo": "azul",
+    "blocos": [
+      {
+        "tipo": "titulo",
+        "eyebrow": "Para quem vem de fora",
+        "titulo": "*Onde* ficar",
+        "alinhar": "centro"
+      },
+      {
+        "tipo": "texto",
+        "texto": "Separamos algumas opções para que fiquem confortáveis durante sua estadia na cidade.",
+        "estilo": "normal",
+        "alinhar": "centro"
+      },
+      {
+        "tipo": "cartoes",
+        "itens": [
+          {
+            "icone": "i:hotel",
+            "titulo": "Novotel",
+            "texto": " Centro do Gávea, próximo ao Uberlândia Shopping tem academia, restaurante e bar. Com piscina ao ar livre, este hotel 4 estrelas tem quartos com ar-condicionado, Wi-Fi grátis e banheiro privativo.",
+            "link": "https://www.hoteis.com/ho3874886528/?chkin=2026-12-06&chkout=2026-12-07&x_pwa=1&rfrr=HSR&pwa_ts=1794943618138&referrerUrl=aHR0cHM6Ly93d3cuaG90ZWlzLmNvbS9Ib3RlbC1TZWFyY2g%3D&useRewards=false&rm1=a2&regionId=3608&destination=Uberl%C3%A2ndia%2C+Minas+Gerais%2C+Brasil&destType=MARKET&neighborhoodId=553248635318456558&selected=121058954&latLong=-18.915571%2C-48.274593&sort=RECOMMENDED&top_dp=504&top_cur=BRL&userIntent=&selectedRoomType=327437334&selectedRatePlan=404791581&expediaPropertyId=121058954&searchId=a2c195fa-a1d3-4fc7-9fd6-385599bf8fae&containsVideo=false",
+            "botao": "Ver hotel"
+          },
+          {
+            "icone": "i:bed-double",
+            "titulo": "Mercure Uberlândia Plaza",
+            "texto": "O Mercure Uberlândia está localizado na região central da cidade e faz parte de um dos maiores complexos mixed use do Brasil, pois conta com o Hotel, Center Shopping, Center Convention e a UBT Uberlandia Business Tower.",
+            "link": "https://www.booking.com/hotel/br/plaza-shopping.pt-br.html?aid=2378099&label=olr-gmcc%3ACj0KCQiAk_DXBhCoARIsAHE-omNh39LZ0MMBXkQ_YHMEU6_hjft8TN204TYMKfWpRkeDGN7us12Clv4aArFDEALw_wcB&sid=bd0ee2a83b5f6653e49c286cba5e7503&all_sr_blocks=32977006_94413655_2_1_0&checkin=2026-12-11&checkout=2026-12-13&dest_id=-677421&dest_type=city&dist=0&group_adults=2&group_children=0&hapos=1&highlighted_blocks=32977006_94413655_2_1_0&hpos=1&matching_block_id=32977006_94413655_2_1_0&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&sr_pri_blocks=32977006_94413655_2_1_0__120130&srepoch=1794943831&srpvid=a16189253aaa1758&type=total&ucfs=1&#hotelTmpl",
+            "botao": "Ver hotel"
+          }
+        ]
       }
     ]
   }
