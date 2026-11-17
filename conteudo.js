@@ -606,7 +606,7 @@ window.CONTEUDO = {
   "rodape": {
     "data": "05 . 06 . 2027",
     "local": "Chácara Bela Vista · Uberlândia · MG",
-    "credito": ""
+    "credito": "\"Que nunca nos falte motivos para brindar!\""
   },
   "enfeites": {
     "capa": [
