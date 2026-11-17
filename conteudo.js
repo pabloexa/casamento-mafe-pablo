@@ -38,7 +38,7 @@ window.CONTEUDO = {
     {
       "id": "menu",
       "menu": "Menu",
-      "visivel": true
+      "visivel": false
     },
     {
       "id": "detalhes",
@@ -717,6 +717,16 @@ window.CONTEUDO = {
         "tamanho": 54,
         "x": 38.4,
         "y": 20.8,
+        "espelhar": false,
+        "soPc": false
+      },
+      {
+        "arte": "andorinha",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 38,
+        "x": 66.7,
+        "y": 42.9,
         "espelhar": false,
         "soPc": false
       }
