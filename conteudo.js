@@ -5,7 +5,8 @@ window.CONTEUDO = {
     "pixChave": "+5534999902008",
     "pixNome": "Pablo Fernandes Crosara",
     "pixCidade": "Uberlândia",
-    "mapaBusca": "Chácara Bela Vista, R. João Vaz Ferreira, 300, Uberlândia - MG, 38412-681"
+    "mapaBusca": "Chácara Bela Vista, R. João Vaz Ferreira, 300, Uberlândia - MG, 38412-681",
+    "planilha": "https://script.google.com/macros/s/AKfycbwslF9evSKAa_nBCgIbbFNA0PgVew8mkMlX-C_1O_xp5YtsAbkYS4yCxybQMfOoR6UC7g/exec"
   },
   "secoes": [
     {
