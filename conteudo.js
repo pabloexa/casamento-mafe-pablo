@@ -300,8 +300,8 @@ window.CONTEUDO = {
         "cor": "azul",
         "voo": "f3",
         "tamanho": 46,
-        "x": 60.4,
-        "y": 60.3,
+        "x": 62,
+        "y": 58.9,
         "xm": 64,
         "ym": 76
       },
