@@ -155,5 +155,19 @@ const MODELOS = [
     dados:() => ({ fundo:'azul', blocos:[ B('divisor', { icone:'assets/beija-flor-2-creme.png' }), B('citacao', { texto:'Escreva aqui uma frase especial para os convidados.', autor:'Mafe & Pablo' }) ] }) },
 ];
 
-window.MP = { ICONES, ARTES, VOOS, ENFEITES_PADRAO, BLOCOS, MODELOS, enfeitesHtml, blocosHtml, novoBloco, arte, artePadrao, esc, fmt, paras, safeUrl, imgUrl };
+/* Título, texto e imagem que aparecem quando o link é compartilhado (WhatsApp, Instagram…).
+   O painel grava este bloco no <head> do index.html ao publicar. */
+function compartilharHtml(c, base){
+  c = c || {};
+  const img = c.imagem ? (/^https?:/i.test(c.imagem) ? c.imagem : base + c.imagem) : base + 'assets/compartilhar.jpg';
+  const L = [`<title>${esc(c.titulo)}</title>`, `<meta name="description" content="${esc(c.descricao)}">`,
+    '<meta property="og:type" content="website">', `<meta property="og:url" content="${esc(base)}">`,
+    `<meta property="og:title" content="${esc(c.titulo)}">`, `<meta property="og:description" content="${esc(c.descricao)}">`,
+    `<meta property="og:image" content="${esc(img)}">`];
+  if (!c.imagem) L.push('<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">');
+  L.push('<meta name="twitter:card" content="summary_large_image">');
+  return '<!--compartilhar-->\n' + L.join('\n') + '\n<!--/compartilhar-->';
+}
+
+window.MP = { ICONES, ARTES, VOOS, ENFEITES_PADRAO, BLOCOS, MODELOS, enfeitesHtml, blocosHtml, novoBloco, arte, artePadrao, esc, fmt, paras, safeUrl, imgUrl, compartilharHtml };
 })();

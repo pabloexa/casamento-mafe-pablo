@@ -183,6 +183,27 @@
   @keyframes tin{from{opacity:0;transform:translate(-50%,10px)}}
   ol.steps{margin:10px 0 0 18px;line-height:1.65;font-size:13px}
   ol.steps li{margin-bottom:6px}
+  pre.code{background:#111a2c;color:#e8e4dc;border-radius:var(--r-sm);padding:14px;font-size:11.5px;line-height:1.5;max-height:220px;overflow:auto;white-space:pre}
+  details.mais-op{margin:4px 4px 10px;font-size:13px}
+  details.mais-op summary{cursor:pointer;color:var(--navy);font-weight:600}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+  .stat{background:#fff;border-radius:var(--r-sm);padding:14px 10px;text-align:center}
+  .stat b{display:block;font-family:'Playfair Display',serif;font-size:30px;line-height:1.1;color:var(--navy)}
+  .stat span{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.08em}
+  .stat:first-child{background:var(--navy)}.stat:first-child b,.stat:first-child span{color:var(--nude)}
+  ul.rest{margin:4px 0 0 18px;font-size:13px;line-height:1.7}
+  .tab-wrap{overflow:auto;max-height:460px;background:#fff;border-radius:var(--r-sm)}
+  table.resp{border-collapse:collapse;font-size:12.5px;width:100%;min-width:560px}
+  table.resp th{position:sticky;top:0;background:var(--nude);text-align:left;padding:9px 10px;font-weight:600;white-space:nowrap}
+  table.resp td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top;max-width:260px}
+  table.resp tr.rep td{opacity:.4}
+  .wa-chat{background:#e5ddd5 url(assets/toile-creme.jpg) center/420px;border-radius:var(--r);padding:22px;display:flex;flex-direction:column;align-items:flex-end}
+  .wa{width:min(330px,100%);background:#dcf8c6;border-radius:10px 10px 0 10px;padding:4px;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+  .wa img{display:block;width:100%;aspect-ratio:1.91/1;object-fit:cover;border-radius:7px 7px 0 0}
+  .wa-t{background:#cfe9ba;padding:8px 10px 9px;border-radius:0 0 7px 7px;display:flex;flex-direction:column;gap:2px}
+  .wa-t b{font-size:13.5px;color:#111}.wa-t span{font-size:12.5px;color:#444}.wa-t small{font-size:11.5px;color:#777}
+  .wa-link{width:min(330px,100%);background:#dcf8c6;margin-top:-1px;padding:2px 12px 8px;font-size:12.5px;color:#027eb5;border-radius:0 0 0 10px;word-break:break-all}
+  @media (max-width:520px){ .stats{grid-template-columns:1fr 1fr} }
   code{background:var(--nude);padding:1px 6px;border-radius:6px;font-size:12px}
   details summary{cursor:pointer;font-weight:600;font-size:13px;padding:4px}
   .fab{display:none}
@@ -289,6 +310,7 @@ const idb = (() => {
 function completar(d){
   if (!d) return d;
   d.secoes ??= [];
+  d.compartilhar ??= { titulo:`${d.capa?.noiva || ''} & ${d.capa?.noivo || ''}`, descricao:d.capa?.local || '', imagem:'' };
   if (!d.enfeites) d.enfeites = clone(MP.ENFEITES_PADRAO);
   ['capa','contagem','rodape'].forEach(id => d.enfeites[id] ??= []);
   d.secoes.forEach(s => {
@@ -351,14 +373,32 @@ const PRONTAS = {
     ...titulo('presentes'), A('presentes.texto','Texto'),
     { k:'presentes.pixLivre', l:'Mostrar a opção “Pix livre” (valor que a pessoa escolhe)', t:'sim' },
     { k:'presentes.mostrar', l:'Presentes que aparecem antes do botão “Ver todos”', t:'numero', min:2, max:30, step:1, padrao:8, dica:'O resto fica escondido até o convidado tocar em “Ver todos os presentes”. Se a lista for menor que isso, o botão não aparece.' },
+    { k:'presentes.mostrarGanhos', l:'Mostrar os presentes que já ganhamos (riscados, no fim da lista)', t:'sim' },
     { k:'presentes.itens', l:'Presentes', t:'lista', item:'presente', novo:{ nome:'Novo presente', descricao:'', valor:0, categoria:'', imagem:'', link:'' }, thumb:i => i.imagem,
-      resumo:i => [i.nome, [i.categoria, Number(i.valor) ? brl(i.valor) : 'sem valor'].filter(Boolean).join(' · ')],
+      resumo:i => [i.nome, [i.oculto ? 'escondido' : '', i.destaque ? '♡ favorito' : '', i.presenteado ? 'já ganhamos' : '', i.categoria,
+        Number(i.valor) ? brl(i.valor) + (Number(i.cotas) ? ' a cota' : '') : 'sem valor', Number(i.cotas) ? `${Number(i.cotasRecebidas) || 0}/${i.cotas} cotas` : ''].filter(Boolean).join(' · ')],
       campos:[ T('nome','Nome do presente'), A('descricao','Descrição', {rows:2}), { k:'valor', l:'Valor', t:'dinheiro' },
+        { k:'destaque', l:'Favorito: fixar no topo da lista', t:'sim', padrao:false },
+        { k:'presenteado', l:'Já ganhamos este presente', t:'sim', padrao:false, dica:'Fica riscado com “Já ganhamos ♡” e vai para o fim da lista.' },
+        { k:'cotas', l:'Dividir em cotas', t:'numero', min:0, max:20, step:1, padrao:0, dica:'0 = presente inteiro. Com cotas, o valor acima passa a ser o valor de cada cota e aparece uma barra de progresso.' },
+        { k:'cotasRecebidas', l:'Cotas já recebidas', t:'numero', min:0, max:20, step:1, padrao:0, dica:'Quando todas forem recebidas, o presente vira “Já ganhamos”.' },
+        { k:'oculto', l:'Esconder do site (sem apagar)', t:'sim', padrao:false },
         { k:'categoria', l:'Categoria', t:'categoria', dica:'Os presentes são agrupados por categoria (ex.: Casa, Lua de mel).' },
         { k:'imagem', l:'Imagem (opcional)', t:'imagem', max:900 },
         T('link','Link de uma loja (opcional)', {t:'url', dica:'Se preencher, aparece o botão “Ver na loja”.'}) ] } ]},
-  confirmar: { nome:'Confirmação', intro:'O formulário de confirmação de presença. As respostas chegam no WhatsApp configurado em “Contato e Pix”.', campos:[
-    ...titulo('confirmar'), A('confirmar.texto','Texto', {rows:2}), A('confirmar.agradecimento','Mensagem depois de enviar', {rows:2}) ]},
+  confirmar: { nome:'Confirmação', intro:'O formulário de confirmação de presença. As respostas chegam no WhatsApp de “Contato e Pix” e, se ligar, numa planilha do Google (veja “Confirmações recebidas”).', campos:[
+    ...titulo('confirmar'), A('confirmar.texto','Texto', {rows:2}), A('confirmar.agradecimento','Mensagem depois de enviar', {rows:2}),
+    { k:'confirmar.maxPessoas', l:'Máximo de pessoas por confirmação', t:'numero', min:1, max:10, step:1, padrao:5, dica:'Com 1, a pergunta “Quantas pessoas” some do formulário.' },
+    { k:'confirmar.pedirRestricao', l:'Perguntar sobre restrição alimentar', t:'sim' },
+    { k:'confirmar.pedirMensagem', l:'Deixar espaço para uma mensagem aos noivos', t:'sim' },
+    { k:'confirmar.abrirWhatsapp', l:'Abrir o WhatsApp com a confirmação ao enviar', t:'sim', dica:'Com a planilha ligada, dá para desligar: o convidado só toca em “Enviar” e a resposta vai direto para a planilha. Sem planilha, o WhatsApp abre sempre.' },
+    { k:'confirmar.perguntas', l:'Perguntas extras', t:'lista', item:'pergunta', novo:{ pergunta:'Nova pergunta', tipo:'texto', opcoes:'', obrigatoria:false },
+      resumo:p => [p.pergunta, ({ texto:'Resposta escrita', simnao:'Sim ou não', opcoes:'Escolher entre opções' }[p.tipo] || 'Resposta escrita') + (p.obrigatoria ? ' · obrigatória' : '')],
+      dica:'Ex.: “Vai precisar de transfer?”, “Qual música não pode faltar?”. Aparecem no formulário, no WhatsApp e na planilha.',
+      campos:[ T('pergunta','Pergunta'),
+        { k:'tipo', l:'Tipo de resposta', t:'select', opcoes:[['texto','Resposta escrita'],['simnao','Sim ou não'],['opcoes','Escolher entre opções']] },
+        A('opcoes','Opções (uma por linha)', {rows:3, dica:'Só vale para “Escolher entre opções”.'}),
+        { k:'obrigatoria', l:'Resposta obrigatória', t:'sim', padrao:false } ] } ]},
 };
 const nomeSecao = s => PRONTAS[s.id] ? PRONTAS[s.id].nome : (s.menu || 'Seção nova');
 
@@ -383,6 +423,7 @@ function paineis(){
   });
   L.push({ id:'rodape', nome:'Rodapé', grupo:'Página', intro:'O final da página.', campos:[ T('rodape.data','Data'), T('rodape.local','Local'), T('rodape.credito','Crédito') ],
     extras:[ enfLista('rodape', 'Pássaros do rodapé') ] });
+  L.push({ id:'confirmacoes', nome:'Confirmações recebidas', grupo:'Convidados', intro:'Quem já confirmou presença, direto da planilha do Google.', custom:painelConfirmacoes });
   L.push({ id:'biblioteca', nome:'Biblioteca', grupo:'Ajustes', intro:'Todos os componentes, ícones e desenhos que podem ser usados no site.', custom:painelBiblioteca });
   L.push({ id:'ordem', nome:'Ordem das seções', grupo:'Ajustes', intro:'Mude a ordem, esconda seções e escolha o nome de cada uma no menu do topo.', custom:painelOrdem });
   L.push({ id:'contato', nome:'Contato e Pix', grupo:'Ajustes', intro:'Para onde vão as confirmações e para quem vai o Pix dos presentes.', campos:[
@@ -390,6 +431,7 @@ function paineis(){
     T('config.pixChave','Chave Pix', {dica:'CPF, e-mail, chave aleatória ou celular. Se for celular, escreva com +55, ex.: <b>+5534999998888</b>.', aviso:'pix'}),
     T('config.pixNome','Nome de quem recebe o Pix'),
     T('config.pixCidade','Cidade de quem recebe o Pix') ]});
+  L.push({ id:'compartilhar', nome:'Prévia no WhatsApp', grupo:'Ajustes', intro:'O título, o texto e a imagem que aparecem quando alguém manda o link do site no WhatsApp, Instagram ou Facebook.', custom:painelCompartilhar });
   L.push({ id:'publicar', nome:'Publicação', grupo:'Ajustes', intro:'Ligue o painel ao site uma vez e depois é só clicar em “Publicar no site”.', custom:painelPublicar });
   return L;
 }
@@ -768,6 +810,164 @@ function painelPublicar(){
   return box;
 }
 
+/* ═════════ Prévia do link no WhatsApp ═════════ */
+const baseSite = () => { const R = REPO(); return `https://${String(R.dono).toLowerCase()}.github.io/${R.nome}/`; };
+function painelCompartilhar(){
+  const c = S.dados.compartilhar ??= {};
+  const card = el('div', {class:'card'});
+  [ T('compartilhar.titulo', 'Título'), A('compartilhar.descricao', 'Texto', {rows:2}),
+    { k:'compartilhar.imagem', l:'Imagem', t:'imagem', max:1200, dica:'De preferência deitada (formato 1200 × 630), como uma foto de vocês. Sem imagem, aparece o cartão com o monograma.' }
+  ].forEach(f => card.append(campo(f, S.dados, '')));
+  const prev = el('div', {class:'wa'});
+  const desenhar = () => { prev.innerHTML = ''; prev.append(
+    el('img', { src: c.imagem ? showSrc(c.imagem) : 'assets/compartilhar.jpg', alt:'' }),
+    el('div', {class:'wa-t'}, el('b', {}, c.titulo || ''), el('span', {}, c.descricao || ''), el('small', {}, baseSite().replace(/^https:\/\//, '').split('/')[0]))); };
+  card.addEventListener('input', () => setTimeout(desenhar, 0)); desenhar();
+  return el('div', {}, card, el('h3', {class:'grp'}, 'Como fica no WhatsApp'),
+    el('div', {class:'wa-chat'}, prev, el('p', {class:'wa-link'}, baseSite())),
+    el('p', {class:'hint'}, 'Muda no site quando você publicar. O WhatsApp guarda a prévia antiga por um tempo: em conversas onde o link já foi mandado, a novidade pode demorar alguns dias para aparecer.'));
+}
+
+/* ═════════ Confirmações na planilha do Google ═════════ */
+const PLAN = {
+  get chave(){ try { return localStorage.getItem('mp-planilha-chave') || ''; } catch(e){ return ''; } },
+  set chave(v){ try { v ? localStorage.setItem('mp-planilha-chave', v) : localStorage.removeItem('mp-planilha-chave'); } catch(e){} },
+};
+const urlPlanilhaOk = u => /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(String(u || '').trim());
+const novaChave = () => [...crypto.getRandomValues(new Uint8Array(12))].map(x => x.toString(16).padStart(2, '0')).join('');
+const scriptPlanilha = chave => `// Confirmações do casamento: recebe as respostas do site e entrega para o painel.
+const CHAVE = '${chave}';
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const dados = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    const r = dados.respostas || {};
+    const aba = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    const ult = aba.getLastColumn();
+    const cab = ult ? aba.getRange(1, 1, 1, ult).getValues()[0].map(String) : [];
+    ['Recebido em'].concat(Object.keys(r).slice(0, 40)).forEach(function (c) {
+      c = String(c).slice(0, 120);
+      if (c && cab.indexOf(c) < 0) { cab.push(c); aba.getRange(1, cab.length).setValue(c).setFontWeight('bold'); }
+    });
+    const limpa = function (v) { v = String(v == null ? '' : v).slice(0, 2000); return /^[=+\\-@]/.test(v) ? "'" + v : v; };
+    aba.appendRow(cab.map(function (c) { return c === 'Recebido em' ? new Date() : limpa(r[c]); }));
+    return saida({ ok: true });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function doGet(e) {
+  if (!e || !e.parameter || e.parameter.chave !== CHAVE) return saida({ ok: false, erro: 'chave' });
+  const planilha = SpreadsheetApp.getActiveSpreadsheet();
+  const aba = planilha.getSheets()[0];
+  return saida({ ok: true, url: planilha.getUrl(), linhas: aba.getLastRow() ? aba.getDataRange().getDisplayValues() : [] });
+}
+
+function saida(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+`;
+async function lerPlanilha(url, chave){
+  let j;
+  try { j = await (await fetch(url.trim() + '?chave=' + encodeURIComponent(chave), { cache:'no-store' })).json(); }
+  catch(e){ throw new Error('não consegui falar com a planilha. Confira se o endereço termina em /exec e se a implantação está com acesso para “Qualquer pessoa”.'); }
+  if (!j || !j.ok) throw new Error(j && j.erro === 'chave' ? 'a chave não confere com a do código da planilha.' : 'a planilha respondeu algo inesperado.');
+  return j;
+}
+function carregarConfirmacoes(){
+  const u = S.dados.config?.planilha;
+  S.plan = Object.assign({}, S.plan, { estado:'carregando' });
+  lerPlanilha(u, PLAN.chave)
+    .then(j => { S.plan = { estado:'ok', j, quando:new Date() }; })
+    .catch(e => { S.plan = { estado:'erro', erro:e.message }; })
+    .finally(() => { if (S.painel === 'confirmacoes') renderEditor(); });
+}
+const normNome = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+function painelConfirmacoes(){
+  const box = el('div');
+  const u = String(S.dados.config?.planilha || '').trim();
+  if (!urlPlanilhaOk(u) || !PLAN.chave) return configurarPlanilha(box, u);
+  if (!S.plan) carregarConfirmacoes();
+  if ((S.publicado.config?.planilha || '') !== u)
+    box.append(el('div', {class:'banner'}, el('b', {}, 'Falta publicar. '), 'A planilha está ligada aqui no painel, mas o site só começa a mandar as confirmações para ela depois que você clicar em “Publicar no site”.'));
+  const P = S.plan;
+  const acoes = el('div', {style:'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px'},
+    el('button', {class:'b navy sm', type:'button', onclick:carregarConfirmacoes}, P.estado === 'carregando' ? 'Atualizando…' : 'Atualizar'),
+    P.j?.url ? el('a', {class:'b line sm', href:P.j.url, target:'_blank', rel:'noopener'}, 'Abrir a planilha') : null,
+    el('button', {class:'b danger sm', type:'button', onclick:() => { if (!confirm('Desligar a planilha? O site volta a mandar as confirmações só pelo WhatsApp (depois de publicar). A planilha e as respostas continuam no seu Google Drive.')) return; S.dados.config.planilha = ''; S.plan = null; mudou(); renderEditor(); }}, 'Desligar planilha'));
+  box.append(acoes);
+  if (P.estado === 'carregando' && !P.j){ box.append(el('p', {class:'empty'}, 'Buscando as confirmações…')); return box; }
+  if (P.estado === 'erro'){ box.append(el('div', {class:'banner err'}, 'Não consegui ler a planilha: ' + P.erro)); return box; }
+  const linhas = P.j.linhas || [], cab = linhas[0] || [], resp = linhas.slice(1).filter(l => l.some(x => String(x).trim()));
+  const col = n => cab.indexOf(n);
+  const [iNome, iPres, iPes] = [col('Nome'), col('Presença'), col('Pessoas')];
+  // Se a mesma pessoa confirmou mais de uma vez, vale a última resposta
+  const ultima = new Map(); resp.forEach((l, i) => ultima.set(normNome(l[iNome]) || '#' + i, i));
+  const validas = resp.filter((l, i) => ultima.get(normNome(l[iNome]) || '#' + i) === i);
+  const vem = validas.filter(l => String(l[iPres] || '').startsWith('Sim'));
+  const pessoas = vem.reduce((s, l) => s + (parseInt(l[iPes], 10) || 1), 0);
+  box.append(el('div', {class:'stats'},
+    el('div', {class:'stat'}, el('b', {}, String(pessoas)), el('span', {}, 'pessoas vêm')),
+    el('div', {class:'stat'}, el('b', {}, String(vem.length)), el('span', {}, 'confirmaram')),
+    el('div', {class:'stat'}, el('b', {}, String(validas.length - vem.length)), el('span', {}, 'não vêm')),
+    el('div', {class:'stat'}, el('b', {}, String(resp.length)), el('span', {}, 'respostas'))));
+  if (!resp.length){ box.append(el('p', {class:'empty'}, 'Nenhuma confirmação ainda. Elas aparecem aqui assim que os convidados enviarem pelo site.')); return box; }
+  const restIdx = col('Restrição alimentar');
+  const rest = restIdx < 0 ? [] : vem.filter(l => String(l[restIdx] || '').trim());
+  if (rest.length) box.append(el('div', {class:'card'}, el('div', {class:'lbl'}, `Restrições alimentares (${rest.length})`),
+    el('ul', {class:'rest'}, ...rest.map(l => el('li', {}, el('b', {}, l[iNome] + ': '), l[restIdx])))));
+  const tabela = el('table', {class:'resp'}, el('thead', {}, el('tr', {}, ...cab.map(h => el('th', {}, h)))),
+    el('tbody', {}, ...resp.map((l, i) => ({ l, i })).reverse().map(({ l, i }) => {
+      const repetida = ultima.get(normNome(l[iNome]) || '#' + i) !== i;
+      return el('tr', { class: repetida ? 'rep' : '', title: repetida ? 'Resposta antiga: esta pessoa confirmou de novo depois' : '' }, ...cab.map(h => el('td', {}, l[col(h)] ?? '')));
+    })));
+  box.append(el('div', {class:'lbl', style:'margin:18px 4px 8px'}, 'Todas as respostas (mais recentes primeiro)'), el('div', {class:'tab-wrap'}, tabela),
+    el('p', {class:'hint'}, `Se alguém confirmou mais de uma vez, os números acima contam só a última resposta (as antigas aparecem apagadinhas). Atualizado às ${P.quando ? P.quando.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) : ''}.`));
+  return box;
+}
+function configurarPlanilha(box, u){
+  if (!u && !PLAN.chave) PLAN.chave = novaChave();
+  const codigo = scriptPlanilha(PLAN.chave || '');
+  const url = el('input', {type:'url', placeholder:'https://script.google.com/macros/s/…/exec', value:u});
+  const chave = el('input', {type:'text', value:PLAN.chave, autocomplete:'off', spellcheck:'false'});
+  const msg = el('p', {class:'hint'});
+  const copiar = el('button', {class:'b soft sm', type:'button', onclick:async () => {
+    try { await navigator.clipboard.writeText(scriptPlanilha(chave.value.trim())); copiar.textContent = 'Copiado!'; setTimeout(() => copiar.textContent = 'Copiar código', 1800); }
+    catch(e){ pre.focus(); getSelection().selectAllChildren(pre); toast('Selecionei o código: use Ctrl+C para copiar.'); }
+  }}, 'Copiar código');
+  const pre = el('pre', {class:'code', tabindex:'0'}, codigo);
+  chave.addEventListener('input', () => { pre.textContent = scriptPlanilha(chave.value.trim()); });
+  box.append(el('div', {class:'card'},
+    el('p', {style:'font-size:13.5px;line-height:1.6;margin-bottom:6px'}, 'Ligue uma planilha do Google uma vez (é de graça, leva uns 5 minutos) e cada confirmação feita no site vira uma linha nela. Aqui no painel você vê o total de convidados e as restrições alimentares.'),
+    el('ol', {class:'steps', html:`
+      <li>Abra <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> com a sua conta Google. Vai abrir uma planilha em branco: dê um nome, ex.: <b>Confirmações do casamento</b>.</li>
+      <li>No menu da planilha, clique em <b>Extensões › Apps Script</b>.</li>
+      <li>Apague o que estiver escrito lá, cole o código abaixo (botão <b>Copiar código</b>) e clique no ícone de disquete para salvar.</li>
+      <li>Clique em <b>Implantar › Nova implantação</b>. Na engrenagem ao lado de “Selecione o tipo”, escolha <b>App da Web</b>. Em <b>Executar como</b> deixe <b>Eu</b> e em <b>Quem pode acessar</b> escolha <b>Qualquer pessoa</b>. Clique em <b>Implantar</b>.</li>
+      <li>O Google pede autorização: clique em <b>Autorizar acesso</b> e escolha a sua conta. Se aparecer “O Google não verificou este app”, clique em <b>Avançado › Acessar</b> (é normal: o app é seu).</li>
+      <li>Copie o <b>URL do app da Web</b> (termina em <code>/exec</code>), cole aqui embaixo e clique em <b>Testar e ligar</b>.</li>`}),
+    el('div', {style:'display:flex;justify-content:space-between;align-items:center;margin:14px 4px 6px'}, el('div', {class:'lbl', style:'margin:0'}, 'Código para colar no Apps Script'), copiar),
+    pre,
+    el('div', {class:'f', style:'margin-top:16px'}, el('label', {}, 'URL do app da Web'), url),
+    el('details', {class:'mais-op', open: !!u}, el('summary', {}, 'Já configurei em outro aparelho'),
+      el('div', {class:'f', style:'margin-top:10px'}, el('label', {}, 'Chave da planilha'), chave,
+        el('p', {class:'hint', html:'Está no começo do código colado no Apps Script, na linha <code>const CHAVE = \'…\'</code>. A chave fica guardada só neste navegador: é ela que impede outras pessoas de lerem a lista de convidados.'}))),
+    el('button', {class:'b navy', type:'button', style:'margin-top:8px', onclick: async e => {
+      const U = url.value.trim(), K = chave.value.trim();
+      if (!urlPlanilhaOk(U)){ msg.textContent = 'Esse endereço não parece o do app da Web. Ele começa com https://script.google.com/macros/s/ e termina em /exec.'; return; }
+      e.target.disabled = true; msg.textContent = 'Testando…';
+      try {
+        const j = await lerPlanilha(U, K);
+        PLAN.chave = K; S.dados.config ??= {}; S.dados.config.planilha = U; S.plan = { estado:'ok', j, quando:new Date() };
+        mudou(); renderEditor(); toast('Planilha ligada! Agora publique o site para as confirmações irem para ela.', 6000);
+      } catch(err){ msg.textContent = 'Não funcionou: ' + err.message; e.target.disabled = false; }
+    }}, 'Testar e ligar'), msg));
+  return box;
+}
+
 async function ghRaw(url, opts={}, token=GH.token){
   const r = await fetch(url, { method: opts.method || 'GET', headers: Object.assign({ Authorization:'Bearer ' + token, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }, opts.body ? {'Content-Type':'application/json'} : {}, opts.headers || {}), body: opts.body ? JSON.stringify(opts.body) : undefined, cache:'no-store' });
   if (!r.ok){
@@ -805,6 +1005,16 @@ async function publicar(){
     await varrer(dados);
     arquivos.push({ path:'conteudo.js', content:b64(arquivoJs(dados)) });
     const R = REPO();
+    // Prévia do link (WhatsApp): o título e a imagem precisam estar escritos no index.html
+    if (!same(dados.compartilhar, S.publicado.compartilhar) || !S.cabecalhoOk){
+      try {
+        const html = await gh(`/contents/index.html?ref=${encodeURIComponent(R.ramo)}`, { headers:{ Accept:'application/vnd.github.raw+json' } });
+        const marca = /<!--compartilhar-->[\s\S]*?<!--\/compartilhar-->/;
+        const novo = MP.compartilharHtml(dados.compartilhar, baseSite());
+        if (marca.test(html) && html.match(marca)[0] !== novo) arquivos.push({ path:'index.html', content:b64(html.replace(marca, () => novo)) });
+        S.cabecalhoOk = true;
+      } catch(e){ console.warn('Prévia do WhatsApp não atualizada:', e.message); }
+    }
     for (let tentativa = 0; tentativa < 3; tentativa++){
       try {
         const ref = await gh(`/git/ref/heads/${R.ramo}`);

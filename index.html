@@ -3,11 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Maria Fernanda & Pablo · 05.06.2027</title>
-<meta name="description" content="Casamento de Maria Fernanda e Pablo · Chácara Bela Vista, Uberlândia · 05 de junho de 2027">
-<meta property="og:title" content="Maria Fernanda & Pablo · 05.06.2027">
+<!--compartilhar-->
+<title>Maria Fernanda &amp; Pablo · 05.06.2027</title>
+<meta name="description" content="Chácara Bela Vista · Uberlândia · MG">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pabloexa.github.io/casamento-mafe-pablo/">
+<meta property="og:title" content="Maria Fernanda &amp; Pablo · 05.06.2027">
 <meta property="og:description" content="Chácara Bela Vista · Uberlândia · MG">
-<meta property="og:image" content="assets/monograma-azul.png">
+<meta property="og:image" content="https://pabloexa.github.io/casamento-mafe-pablo/assets/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!--/compartilhar-->
 <link rel="icon" href="assets/monograma-azul.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -299,6 +306,16 @@
   .gift .g-desc{font-size:13px;opacity:.85;margin-bottom:14px;flex:1;padding:0 6px}
   .gift .g-val{font-family:var(--serif);font-size:20px;margin-bottom:16px}
   .gift .btn{align-self:center;padding:13px 26px}
+  .gift .g-tag{position:absolute;top:26px;left:50%;transform:translateX(-50%);z-index:1;background:var(--navy);color:var(--nude);font-size:9px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;padding:7px 14px;border-radius:999px;white-space:nowrap}
+  .gift .g-val small{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.7;margin-left:4px}
+  .gift .g-cotas{margin:-6px 12px 18px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);font-weight:500}
+  .gift .g-cotas .bar{height:6px;border-radius:9px;background:rgba(27,46,73,.12);overflow:hidden;margin-bottom:8px}
+  .gift .g-cotas .bar i{display:block;height:100%;background:var(--navy);border-radius:9px}
+  .gift.ganho .g-img{filter:grayscale(1);opacity:.5}
+  .gift.ganho h3{text-decoration:line-through;text-decoration-thickness:1px;opacity:.55}
+  .gift.ganho .g-desc,.gift.ganho .g-val,.gift.ganho .g-cat,.gift.ganho .g-cotas{opacity:.45}
+  .gift.ganho:hover{transform:none;box-shadow:none}
+  .gift .g-ok{align-self:center;padding:13px 22px;border-style:dashed;cursor:default;pointer-events:none}
   .gift.recolhido{display:none!important}
   .mais{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:40px}
   .mais.fechado{position:relative;z-index:1;margin-top:-120px;padding-top:120px;background:linear-gradient(to bottom,transparent,var(--sec-bg,var(--nude)) 70%);pointer-events:none}
@@ -328,6 +345,7 @@
     font-family:var(--sans);font-size:15px;color:var(--navy);font-weight:400;transition:border-color .2s,background .2s;
   }
   .rsvp textarea{resize:vertical;min-height:52px}
+  .rsvp .rsvp-erro{color:#b0433a;font-size:13px;text-align:center;margin:0}
   .rsvp input:focus,.rsvp select:focus,.rsvp textarea:focus{outline:none;border-color:var(--navy);background:#fff}
   .rsvp .send{justify-self:center;margin-top:14px}
   .rsvp .thanks{display:none;text-align:center;font-family:var(--serif);font-style:italic;font-size:20px;padding:20px 0}
@@ -480,6 +498,8 @@
     .gift h3{font-size:17px}
     .gift .g-desc{font-size:12px}
     .gift .btn{padding:11px 14px;letter-spacing:.2em}
+    .gift .g-tag{top:16px;font-size:8px;letter-spacing:.18em;padding:6px 10px}
+    .gift .g-cotas{margin:-6px 4px 14px;letter-spacing:.1em}
     .detail{border-radius:var(--r)}
   }
   @media (prefers-reduced-motion:reduce){
@@ -636,13 +656,16 @@
     presentes: { cls:'presentes', html: d => `<div class="wrap">${head(d)}
       ${d.texto ? `<p class="lead reveal d2">${fmt(d.texto)}</p>` : ''}
       <div class="chips" data-chips></div>
-      <div class="gifts">${(d.itens||[]).map((g,i) => `<article class="gift reveal" data-gift="${i}" data-cat="${esc(g.categoria||'')}">
+      <div class="gifts">${ordemPresentes(d).map(({g, i}) => { const ct = cotas(g), ganho = ganhou(g), fav = g.destaque && !ganho;
+        return `<article class="gift reveal${ganho ? ' ganho' : ''}${fav ? ' fav' : ''}" data-gift="${i}" data-cat="${esc(g.categoria||'')}">
         <div class="g-img" style="background-position:${(i*37)%100}% ${(i*61)%100}%">${imgUrl(g.imagem) ? `<img src="${esc(imgUrl(g.imagem))}" alt="" loading="lazy">` : ''}</div>
+        ${fav ? '<span class="g-tag">♡ Favorito</span>' : ''}
         ${g.categoria ? `<div class="g-cat">${esc(g.categoria)}</div>` : ''}
         <h3>${fmt(g.nome || 'Presente')}</h3>
         <p class="g-desc">${fmt(g.descricao)}</p>
-        ${Number(g.valor) ? `<div class="g-val">${brl(g.valor)}</div>` : ''}
-        <button class="btn solid" type="button" data-give="${i}">Presentear</button></article>`).join('')}</div>
+        ${Number(g.valor) ? `<div class="g-val">${brl(g.valor)}${ct.total ? '<small>a cota</small>' : ''}</div>` : ''}
+        ${ct.total ? `<div class="g-cotas"><div class="bar"><i style="width:${Math.round(ct.rec / ct.total * 100)}%"></i></div>${ct.rec} de ${ct.total} cotas</div>` : ''}
+        ${ganho ? '<span class="btn g-ok">Já ganhamos ♡</span>' : `<button class="btn solid" type="button" data-give="${i}">Presentear</button>`}</article>`; }).join('')}</div>
       <div class="mais" data-mais hidden></div>
       ${d.pixLivre !== false ? `<p class="pix-free reveal">Prefere escolher o valor? <a data-pix-livre>Presentear com Pix livre</a></p>` : ''}
       </div>` },
@@ -653,21 +676,45 @@
         <div class="eyebrow">${fmt(d.eyebrow)}</div>
         <h2>${fmt(d.titulo)}</h2>
         <p class="lead">${fmt(d.texto)}</p>
-        <form data-rsvp>
-          <div><label for="f-nome">Nome completo</label><input id="f-nome" name="nome" required autocomplete="name"></div>
-          <div class="row2">
-            <div><label for="f-presenca">Você poderá vir?</label>
-              <select id="f-presenca" name="presenca" required><option value="">Selecione</option><option>Sim, estarei lá</option><option>Infelizmente não poderei</option></select></div>
-            <div><label for="f-qtd">Quantas pessoas (com você)</label>
-              <select id="f-qtd" name="qtd"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-          </div>
-          <div><label for="f-rest">Restrição alimentar (opcional)</label><input id="f-rest" name="rest"></div>
-          <div><label for="f-msg">Mensagem para os noivos (opcional)</label><textarea id="f-msg" name="msg" rows="2"></textarea></div>
-          <button class="btn solid send" type="submit">Enviar confirmação</button>
-        </form>
+        ${formRsvp(d)}
         <div class="thanks" data-thanks>${fmt(d.agradecimento)}</div>
       </div>` }
   };
+
+  /* Presentes: favoritos no topo, os que já ganhamos no fim, escondidos fora */
+  const cotas = g => { const total = Math.max(0, Math.round(Number(g.cotas) || 0)); return { total, rec: Math.min(total, Math.max(0, Math.round(Number(g.cotasRecebidas) || 0))) }; };
+  const ganhou = g => !!g.presenteado || (cotas(g).total > 0 && cotas(g).rec >= cotas(g).total);
+  function ordemPresentes(d){
+    const peso = x => ganhou(x.g) ? 2 : x.g.destaque ? 0 : 1;
+    return (d.itens || []).map((g, i) => ({ g, i }))
+      .filter(x => x.g && !x.g.oculto && !(d.mostrarGanhos === false && ganhou(x.g)))
+      .sort((a, b) => peso(a) - peso(b) || a.i - b.i);
+  }
+
+  /* Formulário de confirmação, montado com o que foi escolhido no painel */
+  const perguntasAtivas = d => (d.perguntas || []).filter(p => p && String(p.pergunta || '').trim());
+  function formRsvp(d){
+    const max = Math.max(1, Math.min(20, Math.round(Number(d.maxPessoas) || 5)));
+    const sel = (id, name, ops, req) => `<select id="${id}" name="${name}"${req ? ' required' : ''}><option value="">Selecione</option>${ops.map(o => `<option>${esc(o)}</option>`).join('')}</select>`;
+    const extras = perguntasAtivas(d).map((p, i) => {
+      const id = 'f-p' + i, req = !!p.obrigatoria;
+      const lab = `<label for="${id}">${esc(p.pergunta)}${req ? '' : ' (opcional)'}</label>`;
+      if (p.tipo === 'simnao') return `<div>${lab}${sel(id, 'p' + i, ['Sim', 'Não'], req)}</div>`;
+      if (p.tipo === 'opcoes') return `<div>${lab}${sel(id, 'p' + i, String(p.opcoes || '').split('\n').map(s => s.trim()).filter(Boolean), req)}</div>`;
+      return `<div>${lab}<input id="${id}" name="p${i}" maxlength="300"${req ? ' required' : ''}></div>`;
+    }).join('');
+    const presenca = `<div><label for="f-presenca">Você poderá vir?</label>${sel('f-presenca', 'presenca', ['Sim, estarei lá', 'Infelizmente não poderei'], true)}</div>`;
+    const qtd = `<div><label for="f-qtd">Quantas pessoas (com você)</label><select id="f-qtd" name="qtd">${Array.from({length:max}, (_, i) => `<option>${i + 1}</option>`).join('')}</select></div>`;
+    return `<form data-rsvp>
+          <div><label for="f-nome">Nome completo</label><input id="f-nome" name="nome" required autocomplete="name" maxlength="120"></div>
+          ${max > 1 ? `<div class="row2">${presenca}${qtd}</div>` : presenca}
+          ${d.pedirRestricao !== false ? '<div><label for="f-rest">Restrição alimentar (opcional)</label><input id="f-rest" name="rest" maxlength="300"></div>' : ''}
+          ${extras}
+          ${d.pedirMensagem !== false ? '<div><label for="f-msg">Mensagem para os noivos (opcional)</label><textarea id="f-msg" name="msg" rows="2" maxlength="1000"></textarea></div>' : ''}
+          <p class="rsvp-erro" data-erro hidden>Não conseguimos enviar agora. Confira a internet e tente de novo.</p>
+          <button class="btn solid send" type="submit">Enviar confirmação</button>
+        </form>`;
+  }
 
   /* Seção livre, montada só com componentes da biblioteca */
   const LIVRE = { html: d => `<div class="wrap">${MP.blocosHtml(d.blocos)}</div>` };
@@ -853,16 +900,36 @@
     if (e.target.closest('[data-pix-livre]')) openGive({nome:'Presente com Pix', valor:0});
   });
 
-  /* ── Confirmação de presença (envia pelo WhatsApp) ── */
-  document.addEventListener('submit', e => {
+  /* ── Confirmação de presença: vai para a planilha do Google e/ou para o WhatsApp ── */
+  document.addEventListener('submit', async e => {
     const f = e.target.closest('[data-rsvp]'); if (!f) return;
     e.preventDefault();
+    const d = C.confirmar || {};
     const v = n => (f.elements[n]?.value || '').trim();
-    const msg = `Confirmação de presença – Casamento ${C.capa?.noiva || ''} & ${C.capa?.noivo || ''}\n\nNome: ${v('nome')}\nPresença: ${v('presenca')}\nPessoas: ${v('qtd')}` +
-      (v('rest') ? `\nRestrição alimentar: ${v('rest')}` : '') + (v('msg') ? `\nMensagem: ${v('msg')}` : '');
+    const vem = v('presenca').startsWith('Sim');
+    const r = { 'Nome': v('nome'), 'Presença': v('presenca'), 'Pessoas': vem ? (v('qtd') || '1') : '0' };
+    if (d.pedirRestricao !== false) r['Restrição alimentar'] = v('rest');
+    perguntasAtivas(d).forEach((p, i) => { r[String(p.pergunta).trim()] = v('p' + i); });
+    if (d.pedirMensagem !== false) r['Mensagem'] = v('msg');
+
+    const planilha = String(cfg().planilha || '').trim();
+    const temPlanilha = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(planilha);
+    const zap = d.abrirWhatsapp !== false || !temPlanilha;
     let num = String(cfg().whatsapp || '').replace(/\D/g,'');
     if (num.length >= 10 && num.length <= 11) num = '55' + num; // número com DDD, sem o 55 do Brasil
-    if (num && !PREVIEW) window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank');
+    if (zap && num && !PREVIEW){
+      const msg = `Confirmação de presença – Casamento ${C.capa?.noiva || ''} & ${C.capa?.noivo || ''}\n\n` +
+        Object.entries(r).filter(([k, x]) => x !== '' && !(k === 'Pessoas' && !vem)).map(([k, x]) => `${k}: ${x}`).join('\n');
+      window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank');
+    }
+    const erro = f.querySelector('[data-erro]'), btn = f.querySelector('.send');
+    if (erro) erro.hidden = true;
+    if (temPlanilha && !PREVIEW){
+      const txt = btn.textContent; btn.disabled = true; btn.textContent = 'Enviando…';
+      try { await fetch(planilha, { method:'POST', mode:'no-cors', body: JSON.stringify({ respostas: r }) }); }
+      catch(err){ if (!zap){ if (erro) erro.hidden = false; btn.disabled = false; btn.textContent = txt; return; } }
+      btn.disabled = false; btn.textContent = txt;
+    }
     f.parentElement.querySelector('[data-thanks]').classList.add('show'); f.reset();
   });
 
