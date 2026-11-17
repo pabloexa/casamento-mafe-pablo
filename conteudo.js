@@ -728,7 +728,9 @@ window.CONTEUDO = {
         "x": 66.7,
         "y": 42.9,
         "espelhar": false,
-        "soPc": false
+        "soPc": false,
+        "xm": 50.2,
+        "ym": 61.4
       }
     ],
     "programacao": [
