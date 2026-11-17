@@ -183,7 +183,7 @@ window.CONTEUDO = {
   "presentes": {
     "eyebrow": "Lista de presentes",
     "titulo": "*Com* carinho",
-    "texto": "Sua presença é o nosso maior presente. Se quiser nos mimar, separamos algumas ideias para a casa nova e para a lua de mel — é só escolher e presentear.",
+    "texto": "Sua presença é o nosso maior presente. Se quiser nos mimar, separamos algumas ideias para a nossa casa e para a lua de mel.",
     "pixLivre": true,
     "itens": [
       {
@@ -213,7 +213,7 @@ window.CONTEUDO = {
       {
         "nome": "Cota da lua de mel",
         "descricao": "Qualquer ajuda já faz a viagem ficar mais bonita.",
-        "valor": 150,
+        "valor": 330,
         "categoria": "Lua de mel",
         "imagem": "",
         "link": ""
@@ -249,6 +249,14 @@ window.CONTEUDO = {
         "categoria": "Experiências",
         "imagem": "",
         "link": ""
+      },
+      {
+        "nome": "Gift Card da PSN",
+        "descricao": "Faça as madrugadas em fins de semana do noivo mais felizes",
+        "valor": 400,
+        "categoria": "Experiências",
+        "imagem": "",
+        "link": ""
       }
     ]
   },
@@ -261,6 +269,6 @@ window.CONTEUDO = {
   "rodape": {
     "data": "05 . 06 . 2027",
     "local": "Chácara Bela Vista · Uberlândia · MG",
-    "credito": "Identidade visual por Letícia Borges Design"
+    "credito": ""
   }
 };
