@@ -85,16 +85,23 @@ window.CONTEUDO = {
     "texto": "Entre árvores, pássaros e jardins, escolhemos celebrar o começo da nossa família ao lado de quem faz parte da nossa história.",
     "fotos": [
       {
-        "imagem": "",
-        "legenda": "Onde tudo começou"
+        "imagem": "fotos/8e063bc8435d06b2.jpg",
+        "legenda": ""
       },
       {
-        "imagem": "",
-        "legenda": "O pedido"
+        "imagem": "fotos/bef90681248ad17b.jpg",
+        "legenda": "24/08/2025 - O dia do pedido"
       },
       {
-        "imagem": "",
-        "legenda": "Nós"
+        "imagem": "fotos/af8a83df98812915.jpg",
+        "legenda": ""
+      }
+    ],
+    "blocos": [
+      {
+        "tipo": "citacao",
+        "texto": "\"Acima de tudo, porém, revistam-se do amor, que é o elo perfeito.\"",
+        "autor": "Colossenses 3:14"
       }
     ]
   },
@@ -674,9 +681,35 @@ window.CONTEUDO = {
         "arte": "beija-flor-1",
         "cor": "azul",
         "voo": "f3",
-        "tamanho": 46,
-        "x": 7,
-        "y": 8
+        "tamanho": 71,
+        "x": 18.4,
+        "y": 15.7,
+        "xm": 3.2,
+        "ym": 19.9
+      },
+      {
+        "arte": "beija-flor-2",
+        "cor": "azul",
+        "voo": "f1",
+        "tamanho": 65,
+        "x": 74,
+        "y": 16.9,
+        "espelhar": false,
+        "soPc": false,
+        "xm": 76.2,
+        "ym": 41
+      },
+      {
+        "arte": "arvore",
+        "cor": "azul",
+        "voo": "parado",
+        "tamanho": 54,
+        "x": 47.9,
+        "y": 94.9,
+        "espelhar": false,
+        "soPc": false,
+        "xm": 44.4,
+        "ym": 98.1
       }
     ],
     "local": [
