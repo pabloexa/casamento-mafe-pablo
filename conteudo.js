@@ -71,7 +71,7 @@ window.CONTEUDO = {
     "eyebrow": "O convite",
     "titulo": "Um convite *para você*",
     "linha1": "Com a bênção de seus pais",
-    "pais": "Cátia Alves Pereira, Sérgio Enrique Muniz Moço e Saint-Clair Gribel Daldegan\n& Sara Fernandes de Castro Crosara e Ademar Crosara",
+    "pais": "Cátia Alves , Sérgio Enrique Moço e Saint-Clair Daldegan\n& Sara Fernandes Crosara e Ademar Crosara",
     "linha2": "Convidam você para seu casamento",
     "data": "05 de junho de 2027",
     "hora": "Às quinze horas e trinta minutos",
